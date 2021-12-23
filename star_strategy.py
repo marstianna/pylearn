@@ -2,7 +2,7 @@ from result import Result
 import talib as ta
 
 
-def morning_star(klines,range=0.0005):
+def morning_star(klines,k=0.0005):
     days = 12
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
@@ -12,7 +12,7 @@ def morning_star(klines,range=0.0005):
             continue
         today = klines.iloc[index]
 
-        if today['open'] * (1+range) > today['close'] > today['open'] * (1-range):
+        if today['open'] * (1+k) > today['close'] > today['open'] * (1-k):
 
             satisfy_ma = True
             # 连续days天ma趋势线都是下跌形态
@@ -33,10 +33,10 @@ def morning_star(klines,range=0.0005):
                         break;
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'swallow').get_dict())
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'morning_star').get_dict())
     return results
 
-def evening_star(klines,range):
+def evening_star(klines,k=0.0005):
     days = 12
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
@@ -46,7 +46,7 @@ def evening_star(klines,range):
             continue
         today = klines.iloc[index]
 
-        if today['open'] * (1+range) > today['close'] > today['open'] * (1-range):
+        if today['open'] * (1+k) > today['close'] > today['open'] * (1-k):
 
             satisfy_ma = True
             # 连续days天ma趋势线都是上涨形态
@@ -67,6 +67,6 @@ def evening_star(klines,range):
                         break;
                 if satisfy_high:
                     results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'swallow').get_dict())
+                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'evening_star').get_dict())
 
     return results

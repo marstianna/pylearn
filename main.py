@@ -10,6 +10,7 @@ import hammer_strategy
 import impale_strategy
 import ma_strategy as ma_s
 import hammer_strategy as hs
+import star_strategy
 import swallon_strategy
 import swallon_strategy as ss
 import util
@@ -50,6 +51,10 @@ def get_buy_action(klines):
     if len(impale) > 0:
         for r in impale:
             result.append(r)
+    star = star_strategy.morning_star(klines)
+    if len(star) > 0:
+        for r in star:
+            result.append(r)
     return result
 
 def get_sell_action(klines):
@@ -61,6 +66,10 @@ def get_sell_action(klines):
     impale = impale_strategy.lower_impale(klines)
     if len(impale) > 0:
         for r in impale:
+            result.append(r)
+    star = star_strategy.evening_star(klines)
+    if len(star) > 0:
+        for r in star:
             result.append(r)
     return result
 

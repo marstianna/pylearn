@@ -34,11 +34,10 @@ def upper_impale(klines,days=12):
                         break;
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'swallow').get_dict())
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale').get_dict())
     return results
 
 def lower_impale(klines,days=12):
-    days = 12
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -70,6 +69,6 @@ def lower_impale(klines,days=12):
                         break;
                 if satisfy_high:
                     results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'swallow').get_dict())
+                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale').get_dict())
 
     return results

@@ -3,6 +3,7 @@ import talib as ta
 from result import Result
 
 #吞没形态还需要考虑命中当天的成交量的情况,如果出现对应的放量,那么认为形态有效
+#吞没形态应该在吞噬的上行或者下行的实体越多,形态效果越强烈,intension的值应该越大
 
 def upper_swallow_lower(klines):
     days = 26
