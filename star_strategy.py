@@ -2,8 +2,8 @@ from result import Result
 import talib as ta
 
 
-def morning_star(klines,k=0.0005):
-    days = 12
+def morning_star(klines,k=0.005):
+    days = 7
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -11,6 +11,10 @@ def morning_star(klines,k=0.0005):
         if index < days:
             continue
         today = klines.iloc[index]
+        yesterday = klines.iloc[index-1]
+
+        if max(today['open'],today['close']) > min(yesterday['open'],yesterday['close']):
+            continue
 
         if today['open'] * (1+k) > today['close'] > today['open'] * (1-k):
 
@@ -19,7 +23,7 @@ def morning_star(klines,k=0.0005):
             for ma_index in range(days):
                 if ma_index == 0:
                     continue
-                satisfy_ma = ma[index] < ma[index - ma_index]
+                satisfy_ma = ma[index - ma_index] < ma[index - ma_index -1]
                 if not satisfy_ma:
                     break;
             if satisfy_ma:
@@ -36,8 +40,8 @@ def morning_star(klines,k=0.0005):
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'morning_star').get_dict())
     return results
 
-def evening_star(klines,k=0.0005):
-    days = 12
+def evening_star(klines,k=0.005):
+    days = 7
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -45,6 +49,10 @@ def evening_star(klines,k=0.0005):
         if index < days:
             continue
         today = klines.iloc[index]
+        yesterday = klines.iloc[index - 1]
+
+        if min(today['open'],today['close']) < max(yesterday['open'],yesterday['close']):
+            continue
 
         if today['open'] * (1+k) > today['close'] > today['open'] * (1-k):
 
@@ -53,7 +61,7 @@ def evening_star(klines,k=0.0005):
             for ma_index in range(days):
                 if ma_index == 0:
                     continue
-                satisfy_ma = ma[index] > ma[index - ma_index]
+                satisfy_ma = ma[index - ma_index] > ma[index - ma_index - 1]
                 if not satisfy_ma:
                     break;
             if satisfy_ma:

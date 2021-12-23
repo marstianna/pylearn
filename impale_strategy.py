@@ -2,7 +2,7 @@ from result import Result
 import talib as ta
 
 
-def upper_impale(klines,days=12):
+def upper_impale(klines,days=7):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -12,15 +12,18 @@ def upper_impale(klines,days=12):
         today = klines.iloc[index]
         yesterday = klines.iloc[index - 1]
 
+        if yesterday['open'] < yesterday['close']:
+            continue
+        if today['open'] > today['close']:
+            continue;
+
         if max(yesterday['open'], yesterday['close']) > today['close'] > (0.5 * (yesterday['open'] + yesterday['close'])) \
-                and today['open'] < min(yesterday['open'],yesterday['close']):
+                and today['open'] < yesterday['low']:
 
             satisfy_ma = True
             # 连续days天ma趋势线都是下跌形态
             for ma_index in range(days):
-                if ma_index == 0:
-                    continue
-                satisfy_ma = ma[index] < ma[index - ma_index]
+                satisfy_ma = ma[index - ma_index] < ma[index - ma_index - 1]
                 if not satisfy_ma:
                     break;
             if satisfy_ma:
@@ -37,7 +40,7 @@ def upper_impale(klines,days=12):
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale').get_dict())
     return results
 
-def lower_impale(klines,days=12):
+def lower_impale(klines,days=7):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -47,7 +50,12 @@ def lower_impale(klines,days=12):
         today = klines.iloc[index]
         yesterday = klines.iloc[index - 1]
 
-        if today['open'] > max(yesterday['open'], yesterday['close']) \
+        if yesterday['open'] > yesterday['close']:
+            continue
+        if today['open'] < today['close']:
+            continue;
+
+        if today['open'] > yesterday['high'] \
                 and (0.5 * (yesterday['open'] + yesterday['close'])) > today['close'] > min(yesterday['open'],yesterday['close']):
 
             satisfy_ma = True
@@ -55,7 +63,7 @@ def lower_impale(klines,days=12):
             for ma_index in range(days):
                 if ma_index == 0:
                     continue
-                satisfy_ma = ma[index] > ma[index - ma_index]
+                satisfy_ma = ma[index - ma_index] > ma[index - ma_index - 1]
                 if not satisfy_ma:
                     break;
             if satisfy_ma:
