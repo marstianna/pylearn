@@ -7,6 +7,7 @@ import numpy as np
 import futu as ft
 
 import hammer_strategy
+import impale_strategy
 import ma_strategy as ma_s
 import hammer_strategy as hs
 import swallon_strategy
@@ -45,6 +46,10 @@ def get_buy_action(klines):
     if len(lower) > 0:
         for r in lower:
             result.append(r)
+    impale = impale_strategy.upper_impale(klines)
+    if len(impale) > 0:
+        for r in impale:
+            result.append(r)
     return result
 
 def get_sell_action(klines):
@@ -52,6 +57,10 @@ def get_sell_action(klines):
     upper = swallon_strategy.lower_swallow_upper(klines)
     if len(upper) > 0:
         for r in upper:
+            result.append(r)
+    impale = impale_strategy.lower_impale(klines)
+    if len(impale) > 0:
+        for r in impale:
             result.append(r)
     return result
 
