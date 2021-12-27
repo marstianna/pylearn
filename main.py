@@ -23,24 +23,6 @@ IGNORE = -1
 KEEP = 2
 NOT_KEEP = 0
 
-def back_test(kline,result):
-    buy_price = 0
-    profits = np.arange(len(kline),dtype=np.float)
-    profit = 0
-    for index in range(len(kline)):
-        if result[index] == BUY:
-            buy_price = kline['close'].values[index]
-        if result[index] == SELL:
-            profit += (kline['close'].values[index] - buy_price) / buy_price
-            buy_price = 0
-        profits[index] = profit
-
-    frame = pd.DataFrame(
-        {"stock": kline['code'], "time": kline['time_key'].values, "close_price": kline['close'], "action": result,
-         "profits": profits})
-    print(frame.iloc[len(frame)-1])
-    return frame.iloc[len(frame)-1]
-
 def get_buy_action(klines):
     result = hammer_strategy.define_upper_hammer(klines)
     lower = swallon_strategy.upper_swallow_lower(klines)
@@ -75,10 +57,15 @@ def get_sell_action(klines):
 
 
 def get_unknown_action(klines):
-    result = ma_s.single_ma2(klines,5)
-    ma = ma_s.single_ma(klines,5)
+    # result = []
+    result = ma_s.single_ma2(klines,2)
+    ma = ma_s.single_ma(klines,2)
     if len(ma) > 0:
         for r in ma:
+            result.append(r)
+    multi_ma = ma_s.multi_ma(klines, short_day=5, long_day=17)
+    if len(multi_ma) > 0:
+        for r in multi_ma:
             result.append(r)
     return result
 

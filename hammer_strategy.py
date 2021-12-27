@@ -80,3 +80,38 @@ def define_lower_hammer(klines,k=0.3):
                     if satisfy_high:
                         hammers.append(Result(klines.iloc[index]['code'],'SELL',klines.iloc[index]['close'],klines.iloc[index]['time_key'],'hammer').get_dict())
     return hammers
+
+
+def handstand_lower_hammer(klines,k=3):
+    hammers = []
+    days = 12
+    ma = ta.MA(klines['close'], timeperiod=days)
+    for index in range(len(klines)):
+        if index < days:
+            continue
+
+        today = klines.iloc[index]
+
+        today_upper_line = today['high'] - max(today['open'], today['close'])
+        today_lower_line = min(today['open'], today['close']) - today['low']
+        today_body = max(today['open'], today['close']) - min(today['open'], today['close'])
+
+        if today_lower_line * k < today_upper_line and today_upper_line > today_body:
+            for ma_index in range(days):
+                if ma_index == 0:
+                    continue
+                satisfy_ma = ma[index] > ma[index - ma_index]
+                if not satisfy_ma:
+                    break;
+            if satisfy_ma:
+                satisfy_high = True;
+                for body_index in range(days):
+                    if body_index == 0:
+                        continue
+                    satisfy_high = klines.iloc[index]['high'] > klines.iloc[index - body_index]['high']
+                    if not satisfy_high:
+                        break;
+                if satisfy_high:
+                    hammers.append(Result(klines.iloc[index]['code'], 'SELL', klines.iloc[index]['close'],
+                                      klines.iloc[index]['time_key'], 'handstand_hammer').get_dict())
+    return hammers
