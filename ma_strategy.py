@@ -16,22 +16,22 @@ def single_ma(kline, days=2):
         index_ = ma[index]
         action = ''
         if index == 0:
-            results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma2').get_dict())
+            results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma').get_dict())
             keep = True
             continue
         before = ma[index-1]
         if math.isnan(before):
-            results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma2').get_dict())
+            results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma').get_dict())
             keep = True
             continue
         if bool(keep):
             if index_ < before:
-                results.append(Result(today['code'], 'SELL', today['close'], today['time_key'], 'single_ma2').get_dict())
+                results.append(Result(today['code'], 'SELL', today['close'], today['time_key'], 'single_ma').get_dict())
                 keep = False
                 continue
         else:
             if index_ >= before:
-                results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma2').get_dict())
+                results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma').get_dict())
                 keep = True
                 continue
     return results

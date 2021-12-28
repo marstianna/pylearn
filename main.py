@@ -53,6 +53,8 @@ def get_sell_action(klines):
     if len(star) > 0:
         for r in star:
             result.append(r)
+    result.extend(hammer_strategy.handstand_lower_hammer(klines))
+    result.extend(star_strategy.falling_star(klines))
     return result
 
 
@@ -95,7 +97,7 @@ if __name__ == '__main__':
             for unknown_action in unknown_actions:
                 result.append(unknown_action)
 
-    result = util.filter_today(result)
+    result = util.filter_day(result,'2021-12-28')
     frame = pd.DataFrame(result, columns=Result.columns)
     frame.sort_values('stock_code', inplace=True)
     print(frame)
