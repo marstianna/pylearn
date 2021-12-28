@@ -18,18 +18,18 @@ def test_hammer(klines):
     result.extend(hammer_strategy.handstand_lower_hammer(klines))
     return result
 
+
 def test_swallow(klines):
-    upper_result = swallon_strategy.upper_swallow_lower(klines)
-    print(pd.DataFrame(upper_result, columns=Result.columns))
-    lower_result = swallon_strategy.lower_swallow_upper(klines)
-    print(pd.DataFrame(lower_result, columns=Result.columns))
+    result = swallon_strategy.upper_swallow_lower(klines)
+    result.extend(swallon_strategy.lower_swallow_upper(klines))
+    return result
 
 
 def test_impale(klines):
     upper_result = impale_strategy.upper_impale(klines)
-    print(pd.DataFrame(upper_result, columns=Result.columns))
-    lower_result = impale_strategy.lower_impale(klines)
-    print(pd.DataFrame(lower_result, columns=Result.columns))
+    upper_result.extend(impale_strategy.lower_impale(klines))
+    return upper_result
+
 
 def test_star(klines):
     result = star_strategy.morning_star(klines)
@@ -59,7 +59,7 @@ def test_group():
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_hammer(kline_frame_table)
+        ma = test_impale(kline_frame_table)
         if ma is not None and len(ma) > 0:
             for m in ma:
                 results.append(m)
@@ -71,7 +71,7 @@ def test_group():
 
 def test_single():
     pd.set_option('display.max_columns', 1000)
-    pd.set_option('display.max_rows', 1000)
+    pd.set_option('display.max_rows', 10000)
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象

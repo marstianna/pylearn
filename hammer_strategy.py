@@ -18,7 +18,7 @@ def define_upper_hammer(klines,k=0.4):
         upper_line = 0
         #下影线
         lower_line = 0
-        if klines.iloc[index]['change_rate'] < 0:
+        if klines.iloc[index]['open'] < klines.iloc[index]['close']:
             body = klines.iloc[index]['open'] - klines.iloc[index]['close']
             upper_line = klines.iloc[index]['high'] - klines.iloc[index]['open']
             lower_line = klines.iloc[index]['close'] - klines.iloc[index]['low']
@@ -50,7 +50,7 @@ def define_lower_hammer(klines,k=0.3):
         upper_line = 0
         # 下影线
         lower_line = 0
-        if klines.iloc[index]['change_rate'] < 0:
+        if klines.iloc[index]['open'] < klines.iloc[index]['close']:
             body = klines.iloc[index]['open'] - klines.iloc[index]['close']
             upper_line = klines.iloc[index]['high'] - klines.iloc[index]['open']
             lower_line = klines.iloc[index]['close'] - klines.iloc[index]['low']

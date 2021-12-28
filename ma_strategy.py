@@ -14,7 +14,6 @@ def single_ma(kline, days=2):
     for index in range(len(kline)):
         today = kline.iloc[index]
         index_ = ma[index]
-        action = ''
         if index == 0:
             results.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'single_ma').get_dict())
             keep = True
