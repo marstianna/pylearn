@@ -2,9 +2,11 @@ import pandas as pd
 import numpy as np
 import futu as ft
 
+import flat_strategy
 import hammer_strategy
 import impale_strategy
 import ma_strategy
+import pregnant_strategy
 import star_strategy
 import swallon_strategy
 import main
@@ -42,11 +44,23 @@ def test_star(klines):
 
 
 def test_ma(klines):
-    # ma = ma_strategy.multi_ma(klines,short_day=7,long_day=21)
-    # ma = ma_strategy.single_ma2(klines,days=2)
-    ma = ma_strategy.single_ma(klines,days=2)
+    ma = ma_strategy.multi_ma(klines,short_day=7,long_day=21)
+    ma.extend(ma_strategy.single_ma2(klines,days=2))
+    ma.extend(ma_strategy.single_ma(klines,days=2))
     compute_profit(ma)
-    return util.filter_last_day(ma)
+    return ma
+
+
+def test_pregnant(klines):
+    result = pregnant_strategy.lower_pregnant(klines)
+    result.extend(pregnant_strategy.upper_pregnant(klines))
+    return result
+
+
+def test_flat(klines):
+    result = flat_strategy.flat_bottom(klines)
+    result.extend(flat_strategy.flat_head(klines))
+    return result
 
 
 def test_group():
@@ -59,7 +73,7 @@ def test_group():
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_impale(kline_frame_table)
+        ma = test_pregnant(kline_frame_table)
         if ma is not None and len(ma) > 0:
             for m in ma:
                 results.append(m)

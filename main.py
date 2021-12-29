@@ -80,7 +80,7 @@ if __name__ == '__main__':
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("target")
+    RET_OK, ret_frame = quote_ctx.get_user_security("first")
     result = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
             for unknown_action in unknown_actions:
                 result.append(unknown_action)
 
-    result = util.filter_day(result,'2021-12-28')
+    result = util.filter_day(result,'2021-12-29')
     frame = pd.DataFrame(result, columns=Result.columns)
     frame.sort_values('stock_code', inplace=True)
     print(frame)

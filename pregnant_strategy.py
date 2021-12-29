@@ -2,7 +2,7 @@ from result import Result
 import talib as ta
 
 
-def upper_pregnant(klines,days=5):
+def upper_pregnant(klines,days=5,k=0.3):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -12,14 +12,13 @@ def upper_pregnant(klines,days=5):
         today = klines.iloc[index]
         yesterday = klines.iloc[index - 1]
 
+        today_body = max(today['open'],today['close']) - min(today['open'],today['close'])
+        yesterday_body = max(yesterday['open'], yesterday['close']) - min(yesterday['open'], yesterday['close'])
+
         if yesterday['open'] < yesterday['close']:
             continue
-        if today['open'] > today['close']:
-            continue;
 
-        if max(yesterday['open'], yesterday['close']) > today['close'] > (0.5 * (yesterday['open'] + yesterday['close'])) \
-                and today['open'] < yesterday['low']:
-
+        if yesterday_body * k > today_body:
             satisfy_ma = True
             # 连续days天ma趋势线都是下跌形态
             for ma_index in range(days):
@@ -27,20 +26,11 @@ def upper_pregnant(klines,days=5):
                 if not satisfy_ma:
                     break;
             if satisfy_ma:
-                satisfy_low = True;
-                for body_index in range(days):
-                    if body_index == 0:
-                        continue
-                    satisfy_low = today['open'] < min(klines.iloc[index - body_index]['close'],
-                                                      klines.iloc[index - body_index]['open'])
-                    if not satisfy_low:
-                        break;
-                if satisfy_low:
-                    results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale').get_dict())
+                results.append(
+                    Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_pregnant').get_dict())
     return results
 
-def lower_pregnant(klines,days=7):
+def lower_pregnant(klines,days=5,k=0.3):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -50,33 +40,20 @@ def lower_pregnant(klines,days=7):
         today = klines.iloc[index]
         yesterday = klines.iloc[index - 1]
 
+        today_body = max(today['open'], today['close']) - min(today['open'], today['close'])
+        yesterday_body = max(yesterday['open'], yesterday['close']) - min(yesterday['open'], yesterday['close'])
+
         if yesterday['open'] > yesterday['close']:
             continue
-        if today['open'] < today['close']:
-            continue;
 
-        if today['open'] > yesterday['high'] \
-                and (0.5 * (yesterday['open'] + yesterday['close'])) > today['close'] > min(yesterday['open'],yesterday['close']):
-
+        if yesterday_body * k > today_body:
             satisfy_ma = True
             # 连续days天ma趋势线都是上涨形态
             for ma_index in range(days):
-                if ma_index == 0:
-                    continue
                 satisfy_ma = ma[index - ma_index] > ma[index - ma_index - 1]
                 if not satisfy_ma:
                     break;
             if satisfy_ma:
-                satisfy_high = True;
-                for body_index in range(days):
-                    if body_index == 0:
-                        continue
-                    satisfy_high = today['open'] > max(klines.iloc[index - body_index]['close'],
-                                                       klines.iloc[index - body_index]['open'])
-                    if not satisfy_high:
-                        break;
-                if satisfy_high:
-                    results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale').get_dict())
-
+                results.append(
+                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_pregnant').get_dict())
     return results

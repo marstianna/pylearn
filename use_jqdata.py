@@ -6,6 +6,7 @@ import pandas as pd
 import chinese_stocks
 import test
 import util
+from result import Result
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 1000)
@@ -29,8 +30,11 @@ if __name__ == '__main__':
         tmp.extend(test.test_hammer(frame))
         tmp.extend(test.test_swallow(frame))
         tmp.extend(test.test_star(frame))
-        results.extend(util.filter_today(tmp))
-    print(results)
+        today = util.filter_timestamp_day(tmp)
+        if len(today) > 0:
+            print(pd.DataFrame(today, columns=Result.columns))
+            results.extend(today)
+    print(pd.DataFrame(results,columns=Result.columns))
     print("Cost time:"+str(time.time()-start_time))
 
 
