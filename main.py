@@ -10,9 +10,11 @@ import hammer_strategy
 import impale_strategy
 import ma_strategy as ma_s
 import hammer_strategy as hs
+import pregnant_strategy
 import star_strategy
 import swallon_strategy
 import swallon_strategy as ss
+import tower_strategy
 import util
 from result import Result
 import time
@@ -25,36 +27,22 @@ NOT_KEEP = 0
 
 def get_buy_action(klines):
     result = hammer_strategy.define_upper_hammer(klines)
-    lower = swallon_strategy.upper_swallow_lower(klines)
-    if len(lower) > 0:
-        for r in lower:
-            result.append(r)
-    impale = impale_strategy.upper_impale(klines)
-    if len(impale) > 0:
-        for r in impale:
-            result.append(r)
-    star = star_strategy.morning_star(klines)
-    if len(star) > 0:
-        for r in star:
-            result.append(r)
+    result.extend(swallon_strategy.upper_swallow_lower(klines))
+    result.extend(impale_strategy.upper_impale(klines))
+    result.extend(star_strategy.morning_star(klines))
+    result.extend(pregnant_strategy.upper_pregnant(klines))
+    result.extend(tower_strategy.tower_bottom(klines))
     return result
 
 def get_sell_action(klines):
     result = hammer_strategy.define_lower_hammer(klines)
-    upper = swallon_strategy.lower_swallow_upper(klines)
-    if len(upper) > 0:
-        for r in upper:
-            result.append(r)
-    impale = impale_strategy.lower_impale(klines)
-    if len(impale) > 0:
-        for r in impale:
-            result.append(r)
-    star = star_strategy.evening_star(klines)
-    if len(star) > 0:
-        for r in star:
-            result.append(r)
+    result.extend(swallon_strategy.lower_swallow_upper(klines))
+    result.extend(impale_strategy.lower_impale(klines))
+    result.extend(star_strategy.evening_star(klines))
     result.extend(hammer_strategy.handstand_lower_hammer(klines))
     result.extend(star_strategy.falling_star(klines))
+    result.extend(pregnant_strategy.lower_pregnant(klines))
+    result.extend(tower_strategy.tower_head(klines))
     return result
 
 
@@ -84,23 +72,14 @@ if __name__ == '__main__':
     result = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        buy_actions = get_buy_action(kline_frame_table)
-        if len(buy_actions) > 0:
-            for buy_action in buy_actions:
-                result.append(buy_action)
-        sell_actions = get_sell_action(kline_frame_table)
-        if len(sell_actions) >0:
-            for sell_action in sell_actions:
-                result.append(sell_action)
-        unknown_actions = get_unknown_action(kline_frame_table)
-        if len(unknown_actions) >0:
-            for unknown_action in unknown_actions:
-                result.append(unknown_action)
+        result.extend(get_buy_action(kline_frame_table))
+        result.extend(get_sell_action(kline_frame_table))
+        # result.extend(get_unknown_action(kline_frame_table))
 
-    result = util.filter_day(result,'2021-12-29')
+    # result = util.filter_day(result,'2021-12-28')
     frame = pd.DataFrame(result, columns=Result.columns)
-    frame.sort_values('stock_code', inplace=True)
-    print(frame)
+    values = frame.sort_values(by=['stock_code', 'date'])
+    print(values)
     quote_ctx.close()  # 关闭对象，防止连接条数用尽
     print(int(time.time()-start))
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

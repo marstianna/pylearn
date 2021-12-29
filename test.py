@@ -69,11 +69,11 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("target")
+    RET_OK, ret_frame = quote_ctx.get_user_security("first")
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_flat(kline_frame_table)
+        ma = test_swallow(kline_frame_table)
         results.extend(ma)
     frame = pd.DataFrame(results, columns=Result.columns)
     values = frame.sort_values(by=['stock_code', 'date'])
