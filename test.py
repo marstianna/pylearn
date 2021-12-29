@@ -73,13 +73,11 @@ def test_group():
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_pregnant(kline_frame_table)
-        if ma is not None and len(ma) > 0:
-            for m in ma:
-                results.append(m)
+        ma = test_flat(kline_frame_table)
+        results.extend(ma)
     frame = pd.DataFrame(results, columns=Result.columns)
-    print(frame)
-    print(frame['profit'].sum())
+    values = frame.sort_values(by=['stock_code', 'date'])
+    print(values)
     quote_ctx.close()
 
 
@@ -105,8 +103,7 @@ def test_single():
             result.append(unknown_action)
 
     frame = pd.DataFrame(result, columns=Result.columns)
-    frame.sort_values('date',inplace=True)
-    compute_profit(frame)
+    frame = frame.sort_values(by=['stock_code','date'],inplace=True)
     print(frame)
     quote_ctx.close()
 

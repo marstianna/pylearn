@@ -65,5 +65,5 @@ def flat_bottom(klines,days=5,k=0.01):
                         break
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'BOTTOM', today['close'], today['time_key'], 'flat_bottom').get_dict())
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom').get_dict())
     return results
