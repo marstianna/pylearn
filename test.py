@@ -44,9 +44,10 @@ def test_star(klines):
 
 
 def test_ma(klines):
-    ma = ma_strategy.multi_ma(klines,short_day=7,long_day=21)
-    ma.extend(ma_strategy.single_ma2(klines,days=2))
-    ma.extend(ma_strategy.single_ma(klines,days=2))
+    ma = []
+    ma.extend(ma_strategy.multi_ma(klines,short_day=12,long_day=26))
+    # ma.extend(ma_strategy.single_ma2(klines,days=26))
+    # ma.extend(ma_strategy.single_ma(klines,days=26))
     compute_profit(ma)
     return ma
 
@@ -65,7 +66,7 @@ def test_flat(klines):
 
 def test_group():
     pd.set_option('display.max_columns', 1000)
-    pd.set_option('display.max_rows', 1000)
+    pd.set_option('display.max_rows', 10000)
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
@@ -73,11 +74,12 @@ def test_group():
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_swallow(kline_frame_table)
-        results.extend(ma)
-    frame = pd.DataFrame(results, columns=Result.columns)
-    values = frame.sort_values(by=['stock_code', 'date'])
-    print(values)
+        ma = test_ma(kline_frame_table)
+        compute_profit(ma)
+        results.extend(util.filter_last_day(ma))
+    t = pd.DataFrame(results, columns=Result.columns)
+    values = t.sort_values(by=['stock_code', 'date'])
+    print(values['profit'].sum())
     quote_ctx.close()
 
 

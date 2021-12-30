@@ -6,24 +6,18 @@ import pandas as pd
 import numpy as np
 import futu as ft
 
+import flat_strategy
 import hammer_strategy
 import impale_strategy
 import ma_strategy as ma_s
-import hammer_strategy as hs
 import pregnant_strategy
 import star_strategy
 import swallon_strategy
-import swallon_strategy as ss
 import tower_strategy
 import util
 from result import Result
 import time
 
-BUY = 1
-SELL = 3
-IGNORE = -1
-KEEP = 2
-NOT_KEEP = 0
 
 def get_buy_action(klines):
     result = hammer_strategy.define_upper_hammer(klines)
@@ -31,8 +25,9 @@ def get_buy_action(klines):
     result.extend(impale_strategy.upper_impale(klines))
     result.extend(star_strategy.morning_star(klines))
     result.extend(pregnant_strategy.upper_pregnant(klines))
-    result.extend(tower_strategy.tower_bottom(klines))
+    result.extend(flat_strategy.flat_bottom(klines))
     return result
+
 
 def get_sell_action(klines):
     result = hammer_strategy.define_lower_hammer(klines)
@@ -42,7 +37,7 @@ def get_sell_action(klines):
     result.extend(hammer_strategy.handstand_lower_hammer(klines))
     result.extend(star_strategy.falling_star(klines))
     result.extend(pregnant_strategy.lower_pregnant(klines))
-    result.extend(tower_strategy.tower_head(klines))
+    result.extend(flat_strategy.flat_head(klines))
     return result
 
 
@@ -76,10 +71,9 @@ if __name__ == '__main__':
         result.extend(get_sell_action(kline_frame_table))
         # result.extend(get_unknown_action(kline_frame_table))
 
-    # result = util.filter_day(result,'2021-12-28')
+    result = util.filter_day(result,'2021-12-28')
     frame = pd.DataFrame(result, columns=Result.columns)
     values = frame.sort_values(by=['stock_code', 'date'])
     print(values)
     quote_ctx.close()  # 关闭对象，防止连接条数用尽
     print(int(time.time()-start))
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

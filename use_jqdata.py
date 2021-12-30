@@ -19,13 +19,14 @@ if __name__ == '__main__':
     results = []
     start_time = time.time()
     for stock_code in chinese_stocks.chinese_stock:
-        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2021-12-28')
+        print("-----------------start:"+stock_code+"-------------------")
+        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2021-12-29')
         frame = pd.DataFrame(
             data={'code': stock_code, 'time_key': daily.index.values, 'open': daily['open'], 'close': daily['close'],
                   'high': daily['high'], 'low': daily['low'], 'volume': daily['volume']}).dropna()
         if len(frame) == 0:
             continue
-        tmp = test.test_ma(frame)
+        tmp = []
         tmp.extend(test.test_impale(frame))
         tmp.extend(test.test_hammer(frame))
         tmp.extend(test.test_swallow(frame))
