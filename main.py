@@ -3,17 +3,11 @@
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import pandas as pd
-import numpy as np
 import futu as ft
 
-import flat_strategy
-import hammer_strategy
-import impale_strategy
-import ma_strategy as ma_s
-import pregnant_strategy
-import star_strategy
-import swallon_strategy
-import tower_strategy
+from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, \
+    swallon_strategy, star_strategy
+from indicator import ma_strategy as ma_s
 import util
 from result import Result
 import time
@@ -63,7 +57,7 @@ if __name__ == '__main__':
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("first")
+    RET_OK, ret_frame = quote_ctx.get_user_security("target")
     result = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
@@ -71,7 +65,7 @@ if __name__ == '__main__':
         result.extend(get_sell_action(kline_frame_table))
         # result.extend(get_unknown_action(kline_frame_table))
 
-    result = util.filter_day(result,'2021-12-28')
+    result = util.filter_day(result,'2021-12-30')
     frame = pd.DataFrame(result, columns=Result.columns)
     values = frame.sort_values(by=['stock_code', 'date'])
     print(values)

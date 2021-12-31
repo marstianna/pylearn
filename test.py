@@ -1,14 +1,9 @@
 import pandas as pd
-import numpy as np
 import futu as ft
 
-import flat_strategy
-import hammer_strategy
-import impale_strategy
-import ma_strategy
-import pregnant_strategy
-import star_strategy
-import swallon_strategy
+from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallon_strategy, \
+    star_strategy
+from indicator import ma_strategy
 import main
 import util
 from result import Result
@@ -45,7 +40,7 @@ def test_star(klines):
 
 def test_ma(klines):
     ma = []
-    ma.extend(ma_strategy.multi_ma(klines,short_day=12,long_day=26))
+    ma.extend(ma_strategy.multi_ma(klines, short_day=12, long_day=26))
     # ma.extend(ma_strategy.single_ma2(klines,days=26))
     # ma.extend(ma_strategy.single_ma(klines,days=26))
     compute_profit(ma)
