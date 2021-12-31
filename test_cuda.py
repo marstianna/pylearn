@@ -1,5 +1,8 @@
+import math
+
 import pandas as pd
 import futu as ft
+import talib
 
 from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallon_strategy, \
     star_strategy
@@ -7,6 +10,7 @@ from indicator import ma_strategy
 import main
 import util
 from result import Result
+from strategy.cuda import flat_strategy_cuda
 
 
 def test_hammer(klines):
@@ -54,9 +58,11 @@ def test_pregnant(klines):
 
 
 def test_flat(klines):
-    result = flat_strategy.flat_bottom(klines)
-    result.extend(flat_strategy.flat_head(klines))
-    return result
+    results=[]
+    x = 64
+    ceil = math.ceil(len(klines) / 64)
+    flat_strategy_cuda.flat_bottom[x,ceil](klines['open'].values,klines['close'].values,klines['high'].values,klines['low'].values,talib.MA(klines['close'],timeperiod=5),results)
+    print(results)
 
 
 def test_group():
@@ -69,9 +75,9 @@ def test_group():
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_ma(kline_frame_table)
-        compute_profit(ma)
-        results.extend(util.filter_last_day(ma))
+        test_flat(kline_frame_table)
+        # compute_profit(ma)
+        # results.extend(util.filter_last_day(ma))
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values['profit'].sum())
