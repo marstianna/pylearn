@@ -1,69 +1,60 @@
 import talib as ta
 import math
 
+from numba import cuda
+
 from result import Result
 
 
 #平头顶
-def flat_head(open,close,high,low,ma_5,days=5,k=0.005):
-    ma = ta.MA(klines['close'], timeperiod=days)
-    results = []
+@cuda.jit
+def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
 
-    for index in range(len(klines)):
-        if index < days:
-            continue
-        today = klines.iloc[index]
-        yesterday = klines.iloc[index - 1]
+    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
 
-        if today['high'] * (1 + k) > yesterday['high'] > today['high'] * (1 - k):
-            satisfy_ma = True
-            # 连续days天ma趋势线都是上涨形态
-            for ma_index in range(days):
-                satisfy_ma = ma[index - ma_index] > ma[index - ma_index - 1]
-                if not satisfy_ma:
-                    break;
-            if satisfy_ma:
-                satisfy_low = True;
-                highest = max(today['high'],yesterday['high'])
-                for idx in range(days):
-                    if idx <= 1:
-                        continue;
-                    if highest < klines.iloc[index - idx]['high']:
-                        satisfy_low = False
-                        break
-                if satisfy_low:
-                    results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'flat_head').get_dict())
-    return results
+    if index < days:
+        return
 
+    if high[index] * (1 + k) > high[index - 1] > high[index] * (1 - k):
+        satisfy_ma = True
+        # 连续days天ma趋势线都是上涨形态
+        for ma_index in range(days):
+            satisfy_ma = ma_5[index - ma_index] > ma_5[index - ma_index - 1]
+            if not satisfy_ma:
+                break;
+        if satisfy_ma:
+            satisfy_low = True;
+            highest = max(high[index],high[index-1])
+            for idx in range(days):
+                if idx <= 1:
+                    continue;
+                if highest < high[index - idx]:
+                    satisfy_low = False
+                    break
+            if satisfy_low:
+                results.insert(index,[0,close[index]])
 
-def flat_bottom(klines,days=5,k=0.005):
-    ma = ta.MA(klines['close'], timeperiod=days)
-    results = []
+@cuda.jit
+def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
+    index = cuda.threadIdx.x + cuda.blockIdx.x * cuda.blockDim.x
+    if index < days:
+        return
 
-    for index in range(len(klines)):
-        if index < days:
-            continue
-        today = klines.iloc[index]
-        yesterday = klines.iloc[index - 1]
-
-        if today['low'] * (1 + k) > yesterday['low'] > today['low'] * (1 - k):
-            satisfy_ma = True
-            # 连续days天ma趋势线都是上涨形态
-            for ma_index in range(days):
-                satisfy_ma = ma[index - ma_index] < ma[index - ma_index - 1]
-                if not satisfy_ma:
-                    break;
-            if satisfy_ma:
-                satisfy_low = True;
-                lowest = min(today['low'], yesterday['low'])
-                for idx in range(days):
-                    if idx <= 1:
-                        continue;
-                    if lowest > klines.iloc[index - idx]['low']:
-                        satisfy_low = False
-                        break
-                if satisfy_low:
-                    results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom').get_dict())
-    return results
+    if low[index] * (1 + k) > low[index-1] > low[index] * (1 - k):
+        satisfy_ma = True
+        # 连续days天ma趋势线都是上涨形态
+        for ma_index in range(days):
+            satisfy_ma = ma_5[index - ma_index] < ma_5[index - ma_index - 1]
+            if not satisfy_ma:
+                break
+        if satisfy_ma:
+            satisfy_low = True
+            lowest = min(low[index], low[index-1])
+            for idx in range(days):
+                if idx <= 1:
+                    continue
+                if lowest > low[index - idx]:
+                    satisfy_low = False
+                    break
+            if satisfy_low:
+                results.insert(index,[0,close[index]])
