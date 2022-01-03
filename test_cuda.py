@@ -11,7 +11,8 @@ import main
 import util
 from result import Result
 from strategy.cuda import flat_strategy_cuda
-
+from numba import cuda
+import time
 
 def test_hammer(klines):
     result = hammer_strategy.define_upper_hammer(klines)
@@ -58,11 +59,22 @@ def test_pregnant(klines):
 
 
 def test_flat(klines):
-    results=[]
-    x = 64
-    ceil = math.ceil(len(klines) / 64)
-    flat_strategy_cuda.flat_bottom[x,ceil](klines['open'].values,klines['close'].values,klines['high'].values,klines['low'].values,talib.MA(klines['close'],timeperiod=5),results)
-    print(results)
+    item = [-1,0]
+    results = [item] * len(klines)
+    gpu_results = cuda.to_device(results)
+    x = 16
+    ceil = math.ceil(len(klines) / x)
+    flat_strategy_cuda.flat_bottom[x,ceil](klines['open'].values,klines['close'].values,klines['high'].values,klines['low'].values,talib.MA(klines['close'],timeperiod=5).values,gpu_results,5,0.005)
+    cuda.synchronize()
+    from_gpu = gpu_results.copy_to_host()
+    results_from_gpu = []
+    for res in from_gpu:
+        if res[0] == -1:
+            continue
+        today=klines.iloc[res[1]]
+        results_from_gpu.append(Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom').get_dict())
+        
+    return results_from_gpu
 
 
 def test_group():
@@ -71,16 +83,16 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("first")
+    RET_OK, ret_frame = quote_ctx.get_user_security("target")
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        test_flat(kline_frame_table)
+        results.extend(test_flat(kline_frame_table))
         # compute_profit(ma)
         # results.extend(util.filter_last_day(ma))
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
-    print(values['profit'].sum())
+    print(values)
     quote_ctx.close()
 
 
@@ -129,4 +141,6 @@ def compute_profit(results):
 
 
 if __name__ == '__main__':
+    start = time.time()
     test_group()
+    print(int(time.time() - start))

@@ -7,6 +7,7 @@ from indicator import ma_strategy
 import main
 import util
 from result import Result
+import time
 
 
 def test_hammer(klines):
@@ -55,7 +56,7 @@ def test_pregnant(klines):
 
 def test_flat(klines):
     result = flat_strategy.flat_bottom(klines)
-    result.extend(flat_strategy.flat_head(klines))
+    # result.extend(flat_strategy.flat_head(klines))
     return result
 
 
@@ -65,16 +66,16 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("first")
+    RET_OK, ret_frame = quote_ctx.get_user_security("target")
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        ma = test_ma(kline_frame_table)
-        compute_profit(ma)
-        results.extend(util.filter_last_day(ma))
+        results.extend(test_flat(kline_frame_table))
+        # compute_profit(ma)
+        # results.extend(util.filter_last_day(ma))
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
-    print(values['profit'].sum())
+    print(values)
     quote_ctx.close()
 
 
@@ -123,4 +124,6 @@ def compute_profit(results):
 
 
 if __name__ == '__main__':
+    start = time.time()
     test_group()
+    print(int(time.time() - start))

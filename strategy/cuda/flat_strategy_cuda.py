@@ -14,6 +14,8 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
 
     if index < days:
         return
+    if index >= len(open):
+        return
 
     if high[index] * (1 + k) > high[index - 1] > high[index] * (1 - k):
         satisfy_ma = True
@@ -32,7 +34,8 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
                     satisfy_low = False
                     break
             if satisfy_low:
-                results.insert(index,[0,close[index]])
+                results[index][0]=1
+                results[index][1]=index
 
 @cuda.jit
 def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
@@ -57,4 +60,5 @@ def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
                     satisfy_low = False
                     break
             if satisfy_low:
-                results.insert(index,[0,close[index]])
+                results[index][0] = 0
+                results[index][1] = index
