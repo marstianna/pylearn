@@ -101,7 +101,6 @@ def evening_star(open, close, high, low, ma_5, results):
 @cuda.jit
 def falling_star(open, close, high, low, ma_5, results, k=3):
     index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
-
     if index < 1:
         return
     if (index + 1) >= len(open):

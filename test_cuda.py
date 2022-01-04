@@ -26,113 +26,132 @@ def get_result_from_cuda(klines):
 
     strategies = 14
     stream_list = list()
-    for i in range(0,strategies):
+    for i in range(0, strategies):
         stream_list.append(cuda.stream())
 
-    gpu_results_flat_bottom = cuda.to_device(results.copy(),stream=stream_list[0])
-    flat_strategy_cuda.flat_bottom[x, ceil,stream_list[0]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                            klines['low'].values, ma_5,
-                                            gpu_results_flat_bottom, 5, 0.005)
+    gpu_results_flat_bottom = cuda.to_device(results.copy(), stream=stream_list[0])
+    flat_strategy_cuda.flat_bottom[x, ceil, stream_list[0]](klines['open'].values, klines['close'].values,
+                                                            klines['high'].values,
+                                                            klines['low'].values, ma_5,
+                                                            gpu_results_flat_bottom, 5, 0.005)
 
-    gpu_results_flat_head = cuda.to_device(results.copy(),stream=stream_list[1])
-    flat_strategy_cuda.flat_head[x, ceil,stream_list[1]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                          klines['low'].values, ma_5,
-                                          gpu_results_flat_head, 5, 0.005)
+    gpu_results_flat_head = cuda.to_device(results.copy(), stream=stream_list[1])
+    flat_strategy_cuda.flat_head[x, ceil, stream_list[1]](klines['open'].values, klines['close'].values,
+                                                          klines['high'].values,
+                                                          klines['low'].values, ma_5,
+                                                          gpu_results_flat_head, 5, 0.005)
 
-    gpu_results_lower_swallow_upper = cuda.to_device(results.copy(),stream=stream_list[2])
-    swallow_strategy_cuda.lower_swallow_upper[x, ceil,stream_list[2]](klines['open'].values, klines['close'].values,
-                                                       klines['high'].values,
-                                                       klines['low'].values, ma_7, gpu_results_lower_swallow_upper)
+    gpu_results_lower_swallow_upper = cuda.to_device(results.copy(), stream=stream_list[2])
+    swallow_strategy_cuda.lower_swallow_upper[x, ceil, stream_list[2]](klines['open'].values, klines['close'].values,
+                                                                       klines['high'].values,
+                                                                       klines['low'].values, ma_7,
+                                                                       gpu_results_lower_swallow_upper)
 
-    gpu_results_upper_swallow_lower = cuda.to_device(results.copy(),stream=stream_list[3])
-    swallow_strategy_cuda.upper_swallow_lower[x, ceil,stream_list[3]](klines['open'].values, klines['close'].values,
-                                                       klines['high'].values,
-                                                       klines['low'].values, ma_7, gpu_results_upper_swallow_lower)
+    gpu_results_upper_swallow_lower = cuda.to_device(results.copy(), stream=stream_list[3])
+    swallow_strategy_cuda.upper_swallow_lower[x, ceil, stream_list[3]](klines['open'].values, klines['close'].values,
+                                                                       klines['high'].values,
+                                                                       klines['low'].values, ma_7,
+                                                                       gpu_results_upper_swallow_lower)
 
-    gpu_results_define_lower_hammer = cuda.to_device(results.copy(),stream=stream_list[4])
-    hammer_strategy_cuda.define_lower_hammer[x, ceil,stream_list[4]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                             klines['low'].values, ma_12, gpu_results_define_lower_hammer, 0.3)
+    gpu_results_define_lower_hammer = cuda.to_device(results.copy(), stream=stream_list[4])
+    hammer_strategy_cuda.define_lower_hammer[x, ceil, stream_list[4]](klines['open'].values, klines['close'].values,
+                                                                      klines['high'].values,
+                                                                      klines['low'].values, ma_12,
+                                                                      gpu_results_define_lower_hammer, 0.3)
 
-    gpu_results_define_upper_hammer = cuda.to_device(results.copy(),stream=stream_list[5])
-    hammer_strategy_cuda.define_upper_hammer[x, ceil,stream_list[5]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                             klines['low'].values, ma_12, gpu_results_define_upper_hammer, 0.4)
+    gpu_results_define_upper_hammer = cuda.to_device(results.copy(), stream=stream_list[5])
+    hammer_strategy_cuda.define_upper_hammer[x, ceil, stream_list[5]](klines['open'].values, klines['close'].values,
+                                                                      klines['high'].values,
+                                                                      klines['low'].values, ma_12,
+                                                                      gpu_results_define_upper_hammer, 0.4)
 
-    gpu_results_handstand_lower_hammer = cuda.to_device(results.copy(),stream=stream_list[6])
-    hammer_strategy_cuda.handstand_lower_hammer[x, ceil,stream_list[6]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_12, gpu_results_handstand_lower_hammer, 3)
+    gpu_results_handstand_lower_hammer = cuda.to_device(results.copy(), stream=stream_list[6])
+    hammer_strategy_cuda.handstand_lower_hammer[x, ceil, stream_list[6]](klines['open'].values, klines['close'].values,
+                                                                         klines['high'].values,
+                                                                         klines['low'].values, ma_12,
+                                                                         gpu_results_handstand_lower_hammer, 3)
 
-    gpu_results_lower_impale = cuda.to_device(results.copy(),stream=stream_list[7])
-    impale_strategy_cuda.lower_impale[x, ceil,stream_list[7]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_7,gpu_results_lower_impale,7)
+    gpu_results_lower_impale = cuda.to_device(results.copy(), stream=stream_list[7])
+    impale_strategy_cuda.lower_impale[x, ceil, stream_list[7]](klines['open'].values, klines['close'].values,
+                                                               klines['high'].values,
+                                                               klines['low'].values, ma_7, gpu_results_lower_impale, 7)
 
-    gpu_results_upper_impale = cuda.to_device(results.copy(),stream=stream_list[8])
-    impale_strategy_cuda.upper_impale[x, ceil,stream_list[8]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_7,gpu_results_upper_impale,7)
+    gpu_results_upper_impale = cuda.to_device(results.copy(), stream=stream_list[8])
+    impale_strategy_cuda.upper_impale[x, ceil, stream_list[8]](klines['open'].values, klines['close'].values,
+                                                               klines['high'].values,
+                                                               klines['low'].values, ma_7, gpu_results_upper_impale, 7)
 
-    gpu_results_lower_pregnant = cuda.to_device(results.copy(),stream=stream_list[9])
-    pregnant_strategy_cuda.lower_pregnant[x, ceil,stream_list[9]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_5,gpu_results_lower_pregnant,5,3)
+    gpu_results_lower_pregnant = cuda.to_device(results.copy(), stream=stream_list[9])
+    pregnant_strategy_cuda.lower_pregnant[x, ceil, stream_list[9]](klines['open'].values, klines['close'].values,
+                                                                   klines['high'].values,
+                                                                   klines['low'].values, ma_5,
+                                                                   gpu_results_lower_pregnant, 5, 3)
 
-    gpu_results_upper_pregnant = cuda.to_device(results.copy(),stream=stream_list[10])
-    pregnant_strategy_cuda.upper_pregnant[x, ceil,stream_list[10]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_5,gpu_results_upper_pregnant,5,3)
+    gpu_results_upper_pregnant = cuda.to_device(results.copy(), stream=stream_list[10])
+    pregnant_strategy_cuda.upper_pregnant[x, ceil, stream_list[10]](klines['open'].values, klines['close'].values,
+                                                                    klines['high'].values,
+                                                                    klines['low'].values, ma_5,
+                                                                    gpu_results_upper_pregnant, 5, 3)
 
-    gpu_results_morning_star = cuda.to_device(results.copy(),stream=stream_list[11])
-    star_strategy_cuda.morning_star[x, ceil,stream_list[11]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_5,gpu_results_morning_star)
+    gpu_results_morning_star = cuda.to_device(results.copy(), stream=stream_list[11])
+    star_strategy_cuda.morning_star[x, ceil, stream_list[11]](klines['open'].values, klines['close'].values,
+                                                              klines['high'].values,
+                                                              klines['low'].values, ma_5, gpu_results_morning_star)
 
-    gpu_results_evening_star = cuda.to_device(results.copy(),stream=stream_list[12])
-    star_strategy_cuda.evening_star[x, ceil,stream_list[12]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_5,gpu_results_evening_star)
+    gpu_results_evening_star = cuda.to_device(results.copy(), stream=stream_list[12])
+    star_strategy_cuda.evening_star[x, ceil, stream_list[12]](klines['open'].values, klines['close'].values,
+                                                              klines['high'].values,
+                                                              klines['low'].values, ma_5, gpu_results_evening_star)
 
-    gpu_results_falling_star = cuda.to_device(results.copy(),stream=stream_list[13])
-    star_strategy_cuda.falling_star[x, ceil,stream_list[13]](klines['open'].values, klines['close'].values, klines['high'].values,
-                                                klines['low'].values, ma_5,gpu_results_falling_star)
+    gpu_results_falling_star = cuda.to_device(results.copy(), stream=stream_list[13])
+    star_strategy_cuda.falling_star[x, ceil, stream_list[13]](klines['open'].values, klines['close'].values,
+                                                              klines['high'].values,
+                                                              klines['low'].values, ma_5, gpu_results_falling_star)
 
     cuda.synchronize()
     results_from_gpu = []
 
     from_gpu_flat_bottom = gpu_results_flat_bottom.copy_to_host(stream=stream_list[0])
-    results_from_gpu.extend(convert_results(from_gpu_flat_bottom, 'flat_bottom', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_flat_bottom, 'flat_bottom', klines))
 
     from_gpu_flat_head = gpu_results_flat_head.copy_to_host(stream=stream_list[1])
-    results_from_gpu.extend(convert_results(from_gpu_flat_head, 'flat_head', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_flat_head, 'flat_head', klines))
 
     from_gpu_lower_swallow_upper = gpu_results_lower_swallow_upper.copy_to_host(stream=stream_list[2])
-    results_from_gpu.extend(convert_results(from_gpu_lower_swallow_upper, 'lower_swallow_upper', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_lower_swallow_upper, 'lower_swallow_upper', klines))
 
     from_gpu_upper_swallow_lower = gpu_results_upper_swallow_lower.copy_to_host(stream=stream_list[3])
-    results_from_gpu.extend(convert_results(from_gpu_upper_swallow_lower, 'upper_swallow_lower', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_upper_swallow_lower, 'upper_swallow_lower', klines))
 
     from_gpu_define_lower_hammer = gpu_results_define_lower_hammer.copy_to_host(stream=stream_list[4])
-    results_from_gpu.extend(convert_results(from_gpu_define_lower_hammer, 'define_lower_hammer', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_define_lower_hammer, 'define_lower_hammer', klines))
 
     from_gpu_define_upper_hammer = gpu_results_define_upper_hammer.copy_to_host(stream=stream_list[5])
-    results_from_gpu.extend(convert_results(from_gpu_define_upper_hammer, 'define_upper_hammer', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_define_upper_hammer, 'define_upper_hammer', klines))
 
     from_gpu_handstand_lower_hammer = gpu_results_handstand_lower_hammer.copy_to_host(stream=stream_list[6])
-    results_from_gpu.extend(convert_results(from_gpu_handstand_lower_hammer, 'handstand_lower_hammer', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_handstand_lower_hammer, 'handstand_lower_hammer', klines))
 
     from_gpu_lower_impale = gpu_results_lower_impale.copy_to_host(stream=stream_list[7])
-    results_from_gpu.extend(convert_results(from_gpu_lower_impale, 'lower_impale', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_lower_impale, 'lower_impale', klines))
 
     from_gpu_upper_impale = gpu_results_upper_impale.copy_to_host(stream=stream_list[8])
-    results_from_gpu.extend(convert_results(from_gpu_upper_impale, 'upper_impale', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_upper_impale, 'upper_impale', klines))
 
     from_gpu_lower_pregnant = gpu_results_lower_pregnant.copy_to_host(stream=stream_list[9])
-    results_from_gpu.extend(convert_results(from_gpu_lower_pregnant, 'lower_pregnant', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_lower_pregnant, 'lower_pregnant', klines))
 
     from_gpu_upper_pregnant = gpu_results_upper_pregnant.copy_to_host(stream=stream_list[10])
-    results_from_gpu.extend(convert_results(from_gpu_upper_pregnant, 'upper_pregnant', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_upper_pregnant, 'upper_pregnant', klines))
 
     from_gpu_morning_star = gpu_results_morning_star.copy_to_host(stream=stream_list[11])
-    results_from_gpu.extend(convert_results(from_gpu_morning_star, 'morning_star', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_morning_star, 'morning_star', klines))
 
     from_gpu_evening_star = gpu_results_evening_star.copy_to_host(stream=stream_list[12])
-    results_from_gpu.extend(convert_results(from_gpu_evening_star, 'evening_star', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_evening_star, 'evening_star', klines))
 
     from_gpu_falling_star = gpu_results_falling_star.copy_to_host(stream=stream_list[13])
-    results_from_gpu.extend(convert_results(from_gpu_falling_star, 'falling_star', ma_5))
+    results_from_gpu.extend(convert_results(from_gpu_falling_star, 'falling_star', klines))
 
     return results_from_gpu
 
@@ -144,7 +163,8 @@ def convert_results(from_gpu_results, method, klines):
             continue
         today = klines.iloc[res[1]]
         results.append(
-            Result(today['code'], 'BUY' if res[0] == 1 else 'SELL', today['close'], today['time_key'], method, 0, res[2], 0).get_dict())
+            Result(today['code'], 'BUY' if res[0] == 1 else 'SELL', today['close'], today['time_key'], method, 0,
+                   res[2], 0).get_dict())
     return results
 
 
