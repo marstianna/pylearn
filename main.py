@@ -15,7 +15,7 @@ import time
 
 def get_buy_action(klines):
     result = hammer_strategy.define_upper_hammer(klines)
-    result.extend(swallon_strategy.upper_swallow_lower(klines))
+    result.extend(swallow_strategy.upper_swallow_lower(klines))
     result.extend(impale_strategy.upper_impale(klines))
     result.extend(star_strategy.morning_star(klines))
     result.extend(pregnant_strategy.upper_pregnant(klines))
@@ -25,7 +25,7 @@ def get_buy_action(klines):
 
 def get_sell_action(klines):
     result = hammer_strategy.define_lower_hammer(klines)
-    result.extend(swallon_strategy.lower_swallow_upper(klines))
+    result.extend(swallow_strategy.lower_swallow_upper(klines))
     result.extend(impale_strategy.lower_impale(klines))
     result.extend(star_strategy.evening_star(klines))
     result.extend(hammer_strategy.handstand_lower_hammer(klines))

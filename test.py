@@ -18,8 +18,8 @@ def test_hammer(klines):
 
 
 def test_swallow(klines):
-    result = swallon_strategy.upper_swallow_lower(klines)
-    result.extend(swallon_strategy.lower_swallow_upper(klines))
+    result = swallow_strategy.upper_swallow_lower(klines)
+    result.extend(swallow_strategy.lower_swallow_upper(klines))
     return result
 
 

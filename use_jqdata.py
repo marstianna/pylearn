@@ -6,7 +6,7 @@ import pandas as pd
 import config
 import test
 import util
-from market.chinese import shanghai_a
+from market.chinese import shanghai_a, chuangye, shenzhen_a
 from result import Result
 
 if __name__ == '__main__':
@@ -19,9 +19,9 @@ if __name__ == '__main__':
 
     results = []
     start_time = time.time()
-    for stock_code in shanghai_a.stocks:
+    for stock_code in shenzhen_a.stocks:
         print("-----------------start:"+stock_code+"-------------------")
-        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2021-12-31')
+        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2022-01-04')
         frame = pd.DataFrame(
             data={'code': stock_code, 'time_key': daily.index.values, 'open': daily['open'], 'close': daily['close'],
                   'high': daily['high'], 'low': daily['low'], 'volume': daily['volume']}).dropna()
