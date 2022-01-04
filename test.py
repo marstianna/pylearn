@@ -31,12 +31,9 @@ def test_impale(klines):
 
 def test_star(klines):
     result = star_strategy.morning_star(klines)
-    # print(pd.DataFrame(upper_result, columns=Result.columns))
-    star = star_strategy.evening_star(klines)
-    result.extend(star)
+    result.extend(star_strategy.evening_star(klines))
     result.extend(star_strategy.falling_star(klines))
     return result
-    # print(pd.DataFrame(lower_result, columns=Result.columns))
 
 
 def test_ma(klines):
@@ -56,7 +53,7 @@ def test_pregnant(klines):
 
 def test_flat(klines):
     result = flat_strategy.flat_bottom(klines)
-    # result.extend(flat_strategy.flat_head(klines))
+    result.extend(flat_strategy.flat_head(klines))
     return result
 
 

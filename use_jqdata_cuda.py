@@ -29,7 +29,7 @@ if __name__ == '__main__':
         if len(frame) == 0:
             continue
         tmp = []
-        tmp.extend(test_cuda.test_flat(frame))
+        tmp.extend(test_cuda.get_result_from_cuda(frame))
         today = util.filter_timestamp_day(tmp)
         if len(today) > 0:
             print(pd.DataFrame(today, columns=Result.columns))
