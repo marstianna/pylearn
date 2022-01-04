@@ -4,32 +4,66 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0fe83136-c155-4aa5-a291-79082c286361" name="Changes" comment="" />
+    <list default="true" id="0fe83136-c155-4aa5-a291-79082c286361" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/strategy/cuda/hammer_strategy_cuda.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/strategy/cuda/impale_strategy_cuda.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/strategy/cuda/pregnant_strategy_cuda.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/strategy/cuda/star_strategy_cuda.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/strategy/swallow_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/strategy/cuda/flat_strategy_cuda.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/cuda/flat_strategy_cuda.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/strategy/impale_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/impale_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/strategy/star_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/star_strategy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/strategy/swallon_strategy.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/cuda/swallow_strategy_cuda.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_cuda.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_cuda.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/venv/lib/python3.8/site-packages/pandas/api/types/__init__.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/venv/lib/python3.8/site-packages/futu/_version.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/venv/lib/python3.8/site-packages/futu/__init__.py" root0="SKIP_INSPECTION" />
+    <setting file="file:///Library/Python/3.8/site-packages/pandas_datareader/data.py" root0="SKIP_INSPECTION" />
+    <setting file="file:///Library/Python/3.8/site-packages/pandas/core/frame.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/venv/lib/python3.8/site-packages/futu/tests/conftest.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/venv/lib/python3.8/site-packages/futu/tests/test_examples.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/main.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/strategy/cuda" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/strategy/cuda" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="F:\anaconda\python.exe" />
+      <option name="SDK_HOME" value="/usr/bin/python3" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
@@ -50,6 +84,13 @@
     <servers />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/pythonProject$test.coverage" NAME="test Coverage Results" MODIFIED="1640852875877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$us.coverage" NAME="us Coverage Results" MODIFIED="1640857429775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/market/us" />
+    <SUITE FILE_PATH="coverage/pythonProject$main.coverage" NAME="main Coverage Results" MODIFIED="1641263243695" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$use_yahoo.coverage" NAME="use_yahoo Coverage Results" MODIFIED="1640866697158" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$test_cuda.coverage" NAME="test_cuda Coverage Results" MODIFIED="1640935499165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$use_tushare.coverage" NAME="use_tushare Coverage Results" MODIFIED="1640677139135" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$use_jqdata.coverage" NAME="use_jqdata Coverage Results" MODIFIED="1640931208746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pylearn$main.coverage" NAME="main Coverage Results" MODIFIED="1640525709119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

@@ -1,7 +1,7 @@
 import pandas as pd
 import futu as ft
 
-from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallon_strategy, \
+from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallow_strategy, \
     star_strategy
 from indicator import ma_strategy
 import main

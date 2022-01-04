@@ -5,17 +5,8 @@
 import pandas as pd
 import numpy as np
 import futu as ft
-
-import flat_strategy
-import hammer_strategy
-import impale_strategy
-import ma_strategy as ma_s
-import pregnant_strategy
-import star_strategy
-import swallon_strategy
-import tower_strategy
 from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, \
-    swallon_strategy, star_strategy
+    swallow_strategy, star_strategy
 from indicator import ma_strategy as ma_s
 import util
 from result import Result
@@ -74,7 +65,7 @@ if __name__ == '__main__':
         result.extend(get_buy_action(kline_frame_table))
         result.extend(get_sell_action(kline_frame_table))
         # result.extend(get_unknown_action(kline_frame_table))
-    result = util.filter_day(result,'2022-01-03')
+    result = util.filter_today(result)
     frame = pd.DataFrame(result, columns=Result.columns)
     values = frame.sort_values(by=['stock_code', 'date'])
     print(values)

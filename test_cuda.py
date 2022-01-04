@@ -4,7 +4,7 @@ import pandas as pd
 import futu as ft
 import talib
 
-from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallon_strategy, \
+from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallow_strategy, \
     star_strategy
 from indicator import ma_strategy
 import main
@@ -59,7 +59,7 @@ def test_pregnant(klines):
 
 
 def test_flat(klines):
-    item = [-1,0]
+    item = [-1,0,0] # [0]=action,[1]=index,[2]=score
     results = [item] * len(klines)
     gpu_results = cuda.to_device(results)
     x = 16

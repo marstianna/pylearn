@@ -23,9 +23,9 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
         for ma_index in range(days):
             satisfy_ma = ma_5[index - ma_index] > ma_5[index - ma_index - 1]
             if not satisfy_ma:
-                break;
+                break
         if satisfy_ma:
-            satisfy_low = True;
+            satisfy_low = True
             highest = max(high[index],high[index-1])
             for idx in range(days):
                 if idx <= 1:
@@ -41,6 +41,8 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
 def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
     index = cuda.threadIdx.x + cuda.blockIdx.x * cuda.blockDim.x
     if index < days:
+        return
+    if index >= len(open):
         return
 
     if low[index] * (1 + k) > low[index-1] > low[index] * (1 - k):
