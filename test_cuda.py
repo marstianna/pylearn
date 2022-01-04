@@ -18,7 +18,7 @@ import time
 def get_result_from_cuda(klines):
     item = [-1, 0, 0]  # [0]=action,[1]=index,[2]=score
     results = [item] * len(klines)
-    x = 32
+    x = 128
     ceil = math.ceil(len(klines) / x)
     ma_5 = talib.MA(klines['close'], timeperiod=5).values
     ma_7 = talib.MA(klines['close'], timeperiod=7).values
@@ -174,11 +174,13 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("target")
+    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        results.extend(get_result_from_cuda(kline_frame_table))
+        cuda = get_result_from_cuda(kline_frame_table)
+        results.extend(util.filter_today(cuda))
+
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values)
