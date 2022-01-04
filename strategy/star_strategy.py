@@ -21,7 +21,7 @@ def morning_star(klines):
         if yesterday['close'] > yesterday['open']:
             continue
         #明天必须是红色
-        if tomorrow['close'] < yesterday['open']:
+        if tomorrow['close'] < tomorrow['open']:
             continue
 
         if max(today['open'],today['close']) > min(yesterday['open'],yesterday['close']):
@@ -71,7 +71,7 @@ def evening_star(klines):
         if yesterday['close'] < yesterday['open']:
             continue
         # 明天必须是绿色
-        if tomorrow['close'] > yesterday['open']:
+        if tomorrow['close'] > tomorrow['open']:
             continue
 
         # if tomorrow['volume'] < yesterday['volume']:

@@ -22,14 +22,14 @@ if __name__ == '__main__':
     start_time = time.time()
     for stock_code in shanghai_a.stocks:
         print("-----------------start:"+stock_code+"-------------------")
-        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2021-12-31')
+        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2022-01-04')
         frame = pd.DataFrame(
             data={'code': stock_code, 'time_key': daily.index.values, 'open': daily['open'], 'close': daily['close'],
                   'high': daily['high'], 'low': daily['low'], 'volume': daily['volume']}).dropna()
         if len(frame) == 0:
             continue
         tmp = []
-        tmp.extend(test_cuda.test_flat(frame))
+        tmp.extend(test_cuda.get_result_from_cuda(frame))
         today = util.filter_timestamp_day(tmp)
         if len(today) > 0:
             print(pd.DataFrame(today, columns=Result.columns))

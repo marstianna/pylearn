@@ -25,7 +25,7 @@ def upper_impale(klines,days=7):
             for ma_index in range(days):
                 satisfy_ma = ma[index - ma_index] < ma[index - ma_index - 1]
                 if not satisfy_ma:
-                    break;
+                    break
             if satisfy_ma:
                 satisfy_low = True;
                 for body_index in range(days):
@@ -34,11 +34,12 @@ def upper_impale(klines,days=7):
                     satisfy_low = today['open'] < min(klines.iloc[index - body_index]['close'],
                                                       klines.iloc[index - body_index]['open'])
                     if not satisfy_low:
-                        break;
+                        break
                 if satisfy_low:
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale').get_dict())
     return results
+
 
 def lower_impale(klines,days=7):
     ma = ta.MA(klines['close'], timeperiod=days)
@@ -53,7 +54,7 @@ def lower_impale(klines,days=7):
         if yesterday['open'] > yesterday['close']:
             continue
         if today['open'] < today['close']:
-            continue;
+            continue
 
         if today['open'] > yesterday['high'] \
                 and (0.5 * (yesterday['open'] + yesterday['close'])) > today['close'] > min(yesterday['open'],yesterday['close']):
@@ -65,16 +66,16 @@ def lower_impale(klines,days=7):
                     continue
                 satisfy_ma = ma[index - ma_index] > ma[index - ma_index - 1]
                 if not satisfy_ma:
-                    break;
+                    break
             if satisfy_ma:
-                satisfy_high = True;
+                satisfy_high = True
                 for body_index in range(days):
                     if body_index == 0:
                         continue
                     satisfy_high = today['open'] > max(klines.iloc[index - body_index]['close'],
                                                        klines.iloc[index - body_index]['open'])
                     if not satisfy_high:
-                        break;
+                        break
                 if satisfy_high:
                     results.append(
                         Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale').get_dict())

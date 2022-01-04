@@ -1,7 +1,7 @@
 import pandas as pd
 import futu as ft
 
-from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallon_strategy, \
+from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallow_strategy, \
     star_strategy
 from indicator import ma_strategy
 import main
@@ -18,8 +18,8 @@ def test_hammer(klines):
 
 
 def test_swallow(klines):
-    result = swallon_strategy.upper_swallow_lower(klines)
-    result.extend(swallon_strategy.lower_swallow_upper(klines))
+    result = swallow_strategy.upper_swallow_lower(klines)
+    result.extend(swallow_strategy.lower_swallow_upper(klines))
     return result
 
 
@@ -31,12 +31,9 @@ def test_impale(klines):
 
 def test_star(klines):
     result = star_strategy.morning_star(klines)
-    # print(pd.DataFrame(upper_result, columns=Result.columns))
-    star = star_strategy.evening_star(klines)
-    result.extend(star)
+    result.extend(star_strategy.evening_star(klines))
     result.extend(star_strategy.falling_star(klines))
     return result
-    # print(pd.DataFrame(lower_result, columns=Result.columns))
 
 
 def test_ma(klines):
@@ -56,7 +53,7 @@ def test_pregnant(klines):
 
 def test_flat(klines):
     result = flat_strategy.flat_bottom(klines)
-    # result.extend(flat_strategy.flat_head(klines))
+    result.extend(flat_strategy.flat_head(klines))
     return result
 
 
@@ -85,7 +82,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='SH.601012')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='HK.BK1063')
     result = []
     # buy_actions = main.get_buy_action(kline_frame_table)
     # if len(buy_actions) > 0:
@@ -101,7 +98,7 @@ def test_single():
             result.append(unknown_action)
 
     frame = pd.DataFrame(result, columns=Result.columns)
-    frame = frame.sort_values(by=['stock_code','date'],inplace=True)
+    frame = frame.sort_values(by=['stock_code','date'])
     print(frame)
     quote_ctx.close()
 
@@ -125,5 +122,5 @@ def compute_profit(results):
 
 if __name__ == '__main__':
     start = time.time()
-    test_group()
+    test_single()
     print(int(time.time() - start))
