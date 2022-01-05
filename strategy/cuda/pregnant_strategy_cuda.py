@@ -6,7 +6,7 @@ import talib as ta
 
 @cuda.jit
 def upper_pregnant(open,close,high,low,ma_5,results,days=5,k=3):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     
     if index < days:
         return
@@ -33,7 +33,7 @@ def upper_pregnant(open,close,high,low,ma_5,results,days=5,k=3):
 
 @cuda.jit
 def lower_pregnant(open,close,high,low,ma_5,results,days=5,k=3):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     
     if index < days:
         return

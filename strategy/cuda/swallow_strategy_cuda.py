@@ -9,7 +9,7 @@ from result import Result
 @cuda.jit
 def upper_swallow_lower(open, close, high, low, ma_7, results):
     days = 7
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
 
     if index < days:
         return
@@ -47,7 +47,7 @@ def upper_swallow_lower(open, close, high, low, ma_7, results):
 @cuda.jit
 def lower_swallow_upper(open, close, high, low, ma_7, results):
     days = 7
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     if index < days:
         return
     if index >= len(open):

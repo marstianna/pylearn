@@ -63,13 +63,19 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("target")
+    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
-        results.extend(test_flat(kline_frame_table))
+        tmp = []
+        tmp.extend(test_flat(kline_frame_table))
+        tmp.extend(test_impale(kline_frame_table))
+        tmp.extend(test_hammer(kline_frame_table))
+        tmp.extend(test_swallow(kline_frame_table))
+        tmp.extend(test_star(kline_frame_table))
+        tmp.extend(test_pregnant(kline_frame_table))
         # compute_profit(ma)
-        # results.extend(util.filter_last_day(ma))
+        results.extend(util.filter_today(tmp))
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values)
@@ -122,5 +128,5 @@ def compute_profit(results):
 
 if __name__ == '__main__':
     start = time.time()
-    test_single()
+    test_group()
     print(int(time.time() - start))

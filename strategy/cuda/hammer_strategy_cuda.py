@@ -8,7 +8,7 @@ from numba import cuda
 
 @cuda.jit
 def define_upper_hammer(open,close,high,low,ma_5,results,k=0.4):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     days = 5
     if index < days:
         return
@@ -43,7 +43,7 @@ def define_upper_hammer(open,close,high,low,ma_5,results,k=0.4):
 @cuda.jit
 def define_lower_hammer(open,close,high,low,ma_12,results,k=0.3):
     days = 12
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
 
     if index < days:
         return
@@ -89,7 +89,7 @@ def define_lower_hammer(open,close,high,low,ma_12,results,k=0.3):
 
 @cuda.jit
 def handstand_lower_hammer(open,close,high,low,ma_12,results,k=3):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
 
     days = 12
     if index < days:

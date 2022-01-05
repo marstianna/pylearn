@@ -6,7 +6,7 @@ import talib as ta
 
 @cuda.jit
 def morning_star(open, close, high, low, ma_5, results):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     days = 5
 
     if index < days:
@@ -41,8 +41,8 @@ def morning_star(open, close, high, low, ma_5, results):
             for body_index in range(days):
                 if body_index == 0:
                     continue
-                satisfy_low = open[index] < min(close[index - body_index]['close'],
-                                                open[index - body_index]['open'])
+                satisfy_low = open[index] < min(close[index - body_index],
+                                                open[index - body_index])
                 if not satisfy_low:
                     break
             if satisfy_low:
@@ -52,7 +52,7 @@ def morning_star(open, close, high, low, ma_5, results):
 
 @cuda.jit
 def evening_star(open, close, high, low, ma_5, results):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     days = 5
     if index < days:
         return
@@ -100,7 +100,7 @@ def evening_star(open, close, high, low, ma_5, results):
 
 @cuda.jit
 def falling_star(open, close, high, low, ma_5, results, k=3):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     if index < 1:
         return
     if (index + 1) >= len(open):

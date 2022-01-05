@@ -10,7 +10,7 @@ from result import Result
 @cuda.jit
 def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
 
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
 
     if index < days:
         return
@@ -39,7 +39,7 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
 
 @cuda.jit
 def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
-    index = cuda.threadIdx.x + cuda.blockIdx.x * cuda.blockDim.x
+    index = cuda.grid(1)
     if index < days:
         return
     if index >= len(open):

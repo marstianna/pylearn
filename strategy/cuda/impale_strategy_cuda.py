@@ -6,7 +6,7 @@ import talib as ta
 
 @cuda.jit
 def upper_impale(open,close,high,low,ma_7,results,days=7):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     if index < days:
         return
     if index >= len(open):
@@ -41,7 +41,7 @@ def upper_impale(open,close,high,low,ma_7,results,days=7):
 
 @cuda.jit
 def lower_impale(open,close,high,low,ma_7,results,days=7):
-    index = cuda.threadIdx.x + cuda.blockDim.x * cuda.gridDim.x
+    index = cuda.grid(1)
     if index < days:
         return
     if index >= len(open):
