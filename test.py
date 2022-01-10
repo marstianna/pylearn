@@ -1,3 +1,5 @@
+import numpy as np
+
 import pandas as pd
 import futu as ft
 
@@ -10,6 +12,7 @@ from result import Result
 import time
 
 from strategy.stop_loss import bottom_stop_loss_line
+from strategy.stop_loss import head_stop_loss_line
 
 
 def test_hammer(klines):
@@ -59,6 +62,15 @@ def test_flat(klines):
     return result
 
 
+def stop_loss(today_results, results, kline):
+    random = today_results[0]
+    timeperiod = np.int(7),
+    if random['action'] == 'BUY':
+        bottom_stop_loss_line.bottom_stop_loss_line(random, results, kline, np.int(7))
+    else:
+        head_stop_loss_line.head_stop_loss_line(random, results, kline, np.int(12))
+
+
 def test_group():
     pd.set_option('display.max_columns', 1000)
     pd.set_option('display.max_rows', 10000)
@@ -78,7 +90,10 @@ def test_group():
         tmp.extend(test_star(kline_frame_table))
         tmp.extend(test_pregnant(kline_frame_table))
         # compute_profit(ma)
-        results.extend(util.filter_today(tmp))
+        today = util.filter_today(tmp)
+        if len(today) > 0:
+            stop_loss(today, tmp, kline_frame_table)
+        results.extend(today)
         # results.extend(util.filter_day(tmp,'2022-01-07'))
         # results.extend(tmp)
     t = pd.DataFrame(results, columns=Result.columns)
@@ -104,10 +119,10 @@ def test_single():
 
     today = util.filter_today(tmp)
 
-    bottom_stop_loss_line.bottom_stop_loss_line(today[0],tmp,kline_frame_table,7)
+    bottom_stop_loss_line.bottom_stop_loss_line(today[0], tmp, kline_frame_table, 7)
 
     frame = pd.DataFrame(tmp, columns=Result.columns)
-    frame = frame.sort_values(by=['stock_code','date'])
+    frame = frame.sort_values(by=['stock_code', 'date'])
     print(frame)
     quote_ctx.close()
 

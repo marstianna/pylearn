@@ -1,9 +1,9 @@
 import talib as ta
 
 
-def calculate_press_line(today_result, klines, _timeperiod):
-    hv = ta.MA(klines['high'], timeperiod=_timeperiod)
-    lv = ta.MA(klines['low'], timeperiod=_timeperiod)
+def calculate_press_line(today_result, klines, days):
+    hv = ta.MA(klines['high'], timeperiod=days)
+    lv = ta.MA(klines['low'], timeperiod=days)
     today_kline = find_today_kline(today_result, klines)
     typ = (today_kline['high'] + today_kline['low'] + today_kline['close']) / 3
 
@@ -22,9 +22,9 @@ def find_today_kline(today_result, klines):
     return None
 
 
-def calculate_support_line(today_result, klines, _timeperiod):
-    hv = ta.MA(klines['high'], timeperiod=_timeperiod)
-    lv = ta.MA(klines['low'], timeperiod=_timeperiod)
+def calculate_support_line(today_result, klines, days):
+    hv = ta.MA(klines['high'], timeperiod=days)
+    lv = ta.MA(klines['low'], timeperiod=days)
     today_kline = find_today_kline(today_result, klines)
     typ = (today_kline['high'] + today_kline['low'] + today_kline['close']) / 3
 
