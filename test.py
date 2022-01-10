@@ -64,7 +64,6 @@ def test_flat(klines):
 
 def stop_loss(today_results, results, kline):
     random = today_results[0]
-    timeperiod = np.int(7),
     if random['action'] == 'BUY':
         bottom_stop_loss_line.bottom_stop_loss_line(random, results, kline, np.int(7))
     else:
@@ -77,7 +76,7 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("港股")
+    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
     results = []
     for code in ret_frame['code']:
         print("-----------------start:" + code + "-------------------")
@@ -90,7 +89,8 @@ def test_group():
         tmp.extend(test_star(kline_frame_table))
         tmp.extend(test_pregnant(kline_frame_table))
         # compute_profit(ma)
-        today = util.filter_today(tmp)
+        # today = util.filter_today(tmp)
+        today = util.filter_day(tmp,'2022-01-07')
         if len(today) > 0:
             stop_loss(today, tmp, kline_frame_table)
         results.extend(today)
@@ -108,7 +108,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='SH.601888')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.ZM')
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -117,9 +117,10 @@ def test_single():
     tmp.extend(test_star(kline_frame_table))
     tmp.extend(test_pregnant(kline_frame_table))
 
-    today = util.filter_today(tmp)
+    for result in tmp:
+        stop_loss([result], tmp, kline_frame_table)
+    # today = util.filter_today(tmp)
 
-    bottom_stop_loss_line.bottom_stop_loss_line(today[0], tmp, kline_frame_table, 7)
 
     frame = pd.DataFrame(tmp, columns=Result.columns)
     frame = frame.sort_values(by=['stock_code', 'date'])
@@ -146,7 +147,7 @@ def compute_profit(results):
 
 if __name__ == '__main__':
     start = time.time()
-    test_group()
-    # test_single()
+    # test_group()
+    test_single()
     # print(100000*(1.5**12))
     print(int(time.time() - start))

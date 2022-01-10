@@ -7,7 +7,9 @@ def filter_today(results):
 
 def filter_day(results, day):
     new_results = []
-    day = day + " 00:00:00";
+    s = " 00:00:00"
+    if s not in day:
+        day = day + s
     for result in results:
         if result['date'] == day:
             new_results.append(result)

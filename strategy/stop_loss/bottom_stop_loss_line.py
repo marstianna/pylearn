@@ -12,7 +12,7 @@ def bottom_stop_loss_line(today_result, total_results, klines, timeperiod, recal
             buy = recall.recall_buy(today_result, total_results,klines, recall_days)
             if buy != -1:
                 stop_loss_price = buy * (1 - k)
-                break;
+                break
             else:
                 # 第二优先级,下跌支撑和之前计算的结果进行比较,取较小值作为止损线
                 stop_loss_price = calculate.calculate_support_line(today_result, klines, timeperiod) * (1 - k)

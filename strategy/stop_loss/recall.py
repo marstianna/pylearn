@@ -7,12 +7,13 @@ def recall_buy(target_result, total_results,klines, target_recall_day):
     for result_idx in range(len(total_results)):
         result = total_results[result_idx]
         if result['date'] == target_result['date']:
-            for recall_idx in range(result_idx):
-                recall_result = total_results[result_idx - recall_idx]
-                end_time = datetime.datetime.strptime(recall_result['date'], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(
+            for recall_idx in range(len(total_results)):
+                recall_result = total_results[recall_idx]
+                start_time = datetime.datetime.strptime(recall_result['date'], "%Y-%m-%d %H:%M:%S")
+                end_time = start_time + datetime.timedelta(
                     days=target_recall_day)
                 result_time = datetime.datetime.strptime(result['date'], "%Y-%m-%d %H:%M:%S")
-                if end_time >= result_time and check_bottom(recall_result):
+                if end_time >= result_time >= start_time and check_bottom(recall_result):
                     results.append(recall_result)
     return calculate_avg(results,klines,1)
 
@@ -37,14 +38,15 @@ def recall_sell(target_result,total_results,klines,target_recall_day):
     for result_idx in range(len(total_results)):
         result = total_results[result_idx]
         if result['date'] == target_result['date']:
-            for recall_idx in range(result_idx):
-                recall_result = total_results[result_idx - recall_idx]
-                end_time = datetime.datetime.strptime(recall_result['date'], "%Y-%m-%d %H:%M:%S") + datetime.timedelta(
+            for recall_idx in range(len(total_results)):
+                recall_result = total_results[recall_idx]
+                start_time = datetime.datetime.strptime(recall_result['date'], "%Y-%m-%d %H:%M:%S")
+                end_time = start_time + datetime.timedelta(
                     days=target_recall_day)
                 result_time = datetime.datetime.strptime(result['date'], "%Y-%m-%d %H:%M:%S")
-                if end_time >= result_time and check_bottom(recall_result):
+                if end_time >= result_time >= start_time and check_head(recall_result):
                     results.append(recall_result)
-    return calculate_avg(results, klines, 1)
+    return calculate_avg(results, klines, 0)
 
 
 def check_head(result):
