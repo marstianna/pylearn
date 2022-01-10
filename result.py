@@ -1,7 +1,7 @@
 class Result:
-    columns = ['stock_code','action','price','date','strategy','profit','intension','current_hold']
+    columns = ['stock_code','action','price','date','strategy','profit','intension','current_hold','stop_loss_line']
 
-    def __init__(self,stock_code,action,price,date,strategy,profit=0,intension=0,current_hold=0):
+    def __init__(self,stock_code,action,price,date,strategy,profit=0,intension=0,current_hold=0,stop_loss_line=0):
         self.__stock_code = stock_code
         self.__action = action
         self.__price = price
@@ -10,6 +10,7 @@ class Result:
         self.__profit = profit
         self.__intension = intension
         self.__current_hold = current_hold
+        self.__stock_loss_line = stop_loss_line
 
     def get_dict(self):
         return {'stock_code':self.__stock_code,
@@ -19,4 +20,5 @@ class Result:
                 'strategy':self.__strategy,
                 'profit':self.__profit,
                 'intension':self.__intension,
-                'current_hold':self.__current_hold}
+                'current_hold':self.__current_hold,
+                'stop_loss_line':self.__stock_loss_line}

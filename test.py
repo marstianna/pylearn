@@ -9,6 +9,8 @@ import util
 from result import Result
 import time
 
+from strategy.stop_loss import bottom_stop_loss_line
+
 
 def test_hammer(klines):
     result = hammer_strategy.define_upper_hammer(klines)
@@ -63,9 +65,10 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
+    RET_OK, ret_frame = quote_ctx.get_user_security("港股")
     results = []
     for code in ret_frame['code']:
+        print("-----------------start:" + code + "-------------------")
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
         tmp = []
         tmp.extend(test_flat(kline_frame_table))
@@ -76,6 +79,8 @@ def test_group():
         tmp.extend(test_pregnant(kline_frame_table))
         # compute_profit(ma)
         results.extend(util.filter_today(tmp))
+        # results.extend(util.filter_day(tmp,'2022-01-07'))
+        # results.extend(tmp)
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values)
@@ -88,22 +93,20 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='HK.BK1063')
-    result = []
-    # buy_actions = main.get_buy_action(kline_frame_table)
-    # if len(buy_actions) > 0:
-    #     for buy_action in buy_actions:
-    #         result.append(buy_action)
-    # sell_actions = main.get_sell_action(kline_frame_table)
-    # if len(sell_actions) > 0:
-    #     for sell_action in sell_actions:
-    #         result.append(sell_action)
-    unknown_actions = main.get_unknown_action(kline_frame_table)
-    if len(unknown_actions) > 0:
-        for unknown_action in unknown_actions:
-            result.append(unknown_action)
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='SH.601888')
+    tmp = []
+    tmp.extend(test_flat(kline_frame_table))
+    tmp.extend(test_impale(kline_frame_table))
+    tmp.extend(test_hammer(kline_frame_table))
+    tmp.extend(test_swallow(kline_frame_table))
+    tmp.extend(test_star(kline_frame_table))
+    tmp.extend(test_pregnant(kline_frame_table))
 
-    frame = pd.DataFrame(result, columns=Result.columns)
+    today = util.filter_today(tmp)
+
+    bottom_stop_loss_line.bottom_stop_loss_line(today[0],tmp,kline_frame_table,7)
+
+    frame = pd.DataFrame(tmp, columns=Result.columns)
     frame = frame.sort_values(by=['stock_code','date'])
     print(frame)
     quote_ctx.close()
@@ -129,4 +132,6 @@ def compute_profit(results):
 if __name__ == '__main__':
     start = time.time()
     test_group()
+    # test_single()
+    # print(100000*(1.5**12))
     print(int(time.time() - start))

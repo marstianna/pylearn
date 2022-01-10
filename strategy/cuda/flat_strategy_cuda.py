@@ -17,6 +17,20 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
     if index >= len(open):
         return
 
+    # 昨天必须是一根大阳线
+    if open[index-1] > close[index-1]:
+        return
+    # 今天必须是一根阴线
+    if open[index] < close[index]:
+        return
+
+    today_upper_line = high[index] - max(open[index], close[index])
+    today_lower_line = min(open[index], close[index]) - low[index]
+    today_body = max(open[index], close[index]) - min(open[index], close[index])
+
+    if today_body < today_upper_line or today_body < today_lower_line:
+        return
+
     if high[index] * (1 + k) > high[index - 1] > high[index] * (1 - k):
         satisfy_ma = True
         # 连续days天ma趋势线都是上涨形态
@@ -43,6 +57,20 @@ def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
     if index < days:
         return
     if index >= len(open):
+        return
+
+    # 昨天必须是一根大阴线
+    if open[index-1] < close[index-1]:
+        return
+    # 今天必须是一根阳线
+    if open[index] > close[index]:
+        return
+
+    today_upper_line = high[index] - max(open[index], close[index])
+    today_lower_line = min(open[index], close[index]) - low[index]
+    today_body = max(open[index], close[index]) - min(open[index], close[index])
+    
+    if today_body > today_upper_line or today_body > today_lower_line:
         return
 
     if low[index] * (1 + k) > low[index-1] > low[index] * (1 - k):
