@@ -164,10 +164,10 @@
     </configuration>
     <list>
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.use_jqdata" />
-      <item itemvalue="Python.test" />
       <item itemvalue="Python.plate_data" />
       <item itemvalue="Python.swallow_score" />
+      <item itemvalue="Python.test" />
+      <item itemvalue="Python.use_jqdata" />
     </list>
     <recent_temporary>
       <list>
