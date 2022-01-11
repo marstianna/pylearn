@@ -22,9 +22,6 @@ def flat_head(klines,days=7,k=0.005):
         if today['open'] < today['close']:
             continue
 
-        if today['close'] < min(yesterday['open'],yesterday['close']):
-            continue
-
         yesterday_upper_line = yesterday['high'] - max(yesterday['open'], yesterday['close'])
         yesterday_lower_line = min(yesterday['open'], yesterday['close']) - yesterday['low']
         yesterday_body = max(yesterday['open'], yesterday['close']) - min(yesterday['open'], yesterday['close'])
@@ -69,9 +66,6 @@ def flat_bottom(klines,days=7,k=0.005):
             continue
         # 今天必须是一根阳线
         if today['open'] > today['close']:
-            continue
-
-        if today['close'] > max(yesterday['open'], yesterday['close']):
             continue
 
         yesterday_upper_line = yesterday['high'] - max(yesterday['open'], yesterday['close'])

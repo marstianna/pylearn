@@ -4,7 +4,7 @@ import pandas as pd
 import futu as ft
 
 from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallow_strategy, \
-    star_strategy
+    star_strategy, belt_hold_line, crows
 from indicator import ma_strategy
 import main
 import util
@@ -62,12 +62,23 @@ def test_flat(klines):
     return result
 
 
+def test_belt_hold(klines):
+    results = belt_hold_line.lower_belt_hold_line(klines)
+    results.extend(belt_hold_line.upper_belt_hold_line(klines))
+    return results
+
+
+def test_crows(klines):
+    results = crows.two_crows(klines)
+    results.extend(crows.three_crows(klines))
+    return results
+
 def stop_loss(today_results, results, kline):
     random = today_results[0]
     if random['action'] == 'BUY':
-        bottom_stop_loss_line.bottom_stop_loss_line(random, results, kline, np.int(7))
+        bottom_stop_loss_line.bottom_stop_loss_line(random, results, kline, 7)
     else:
-        head_stop_loss_line.head_stop_loss_line(random, results, kline, np.int(12))
+        head_stop_loss_line.head_stop_loss_line(random, results, kline, 12)
 
 
 def test_group():
@@ -88,13 +99,15 @@ def test_group():
         tmp.extend(test_swallow(kline_frame_table))
         tmp.extend(test_star(kline_frame_table))
         tmp.extend(test_pregnant(kline_frame_table))
+        tmp.extend(test_belt_hold(kline_frame_table))
+        tmp.extend(test_crows(kline_frame_table))
         # compute_profit(ma)
         # today = util.filter_today(tmp)
-        today = util.filter_day(tmp,'2022-01-07')
-        if len(today) > 0:
-            stop_loss(today, tmp, kline_frame_table)
-        results.extend(today)
-        # results.extend(util.filter_day(tmp,'2022-01-07'))
+        day = util.filter_day(tmp, '2022-01-10')
+        for result in day:
+            stop_loss([result], tmp, kline_frame_table)
+        results.extend(day)
+        # results.extend(today)
         # results.extend(tmp)
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
@@ -116,6 +129,8 @@ def test_single():
     tmp.extend(test_swallow(kline_frame_table))
     tmp.extend(test_star(kline_frame_table))
     tmp.extend(test_pregnant(kline_frame_table))
+    tmp.extend(test_belt_hold(kline_frame_table))
+    tmp.extend(test_crows(kline_frame_table))
 
     for result in tmp:
         stop_loss([result], tmp, kline_frame_table)
