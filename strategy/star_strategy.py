@@ -2,7 +2,7 @@ from result import Result
 import talib as ta
 
 
-#TODO 星型图是由三个蜡烛图组成
+# TODO 星型图是由三个蜡烛图组成
 def morning_star(klines):
     days = 5
     ma = ta.MA(klines['close'], timeperiod=days)
@@ -11,32 +11,32 @@ def morning_star(klines):
     for index in range(len(klines)):
         if index < days:
             continue
-        if (index+1) >= len(klines):
-            continue;
+        if (index + 1) >= len(klines):
+            continue
         today = klines.iloc[index]
-        yesterday = klines.iloc[index-1]
+        yesterday = klines.iloc[index - 1]
         tomorrow = klines.iloc[index + 1]
 
-        #昨天必须是绿色
+        # 昨天必须是绿色
         if yesterday['close'] > yesterday['open']:
             continue
-        #明天必须是红色
+        # 明天必须是红色
         if tomorrow['close'] < tomorrow['open']:
             continue
 
-        if max(today['open'],today['close']) > min(yesterday['open'],yesterday['close']):
+        if max(today['open'], today['close']) > min(yesterday['open'], yesterday['close']):
             continue
 
-        if min(tomorrow['open'],tomorrow['close']) < max(today['open'],today['close']):
+        if min(tomorrow['open'], tomorrow['close']) < max(today['open'], today['close']):
             continue
 
-        if tomorrow['close'] > 0.5 * (yesterday['open']+yesterday['close']):
+        if tomorrow['close'] > 0.5 * (yesterday['open'] + yesterday['close']):
             satisfy_ma = True
             # 连续days天ma趋势线都是下跌形态
             for ma_index in range(days):
                 if ma_index == 0:
                     continue
-                satisfy_ma = ma[index - ma_index] < ma[index - ma_index -1]
+                satisfy_ma = ma[index - ma_index] < ma[index - ma_index - 1]
                 if not satisfy_ma:
                     break;
             if satisfy_ma:
@@ -53,6 +53,7 @@ def morning_star(klines):
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'morning_star').get_dict())
     return results
 
+
 def evening_star(klines):
     days = 5
     ma = ta.MA(klines['close'], timeperiod=days)
@@ -61,8 +62,8 @@ def evening_star(klines):
     for index in range(len(klines)):
         if index < days:
             continue
-        if (index+1) >= len(klines):
-            continue;
+        if (index + 1) >= len(klines):
+            continue
         today = klines.iloc[index]
         yesterday = klines.iloc[index - 1]
         tomorrow = klines.iloc[index + 1]
@@ -77,13 +78,13 @@ def evening_star(klines):
         # if tomorrow['volume'] < yesterday['volume']:
         #     continue
 
-        if min(today['open'],today['close']) < max(yesterday['open'],yesterday['close']):
+        if min(today['open'], today['close']) < max(yesterday['open'], yesterday['close']):
             continue
 
         # if max(tomorrow['open'],tomorrow['close']) > min(today['open'],today['close']):
         #     continue
 
-        if tomorrow['close'] < 0.5 * (yesterday['open']+yesterday['close']):
+        if tomorrow['close'] < 0.5 * (yesterday['open'] + yesterday['close']):
 
             satisfy_ma = True
             # 连续days天ma趋势线都是上涨形态
@@ -109,18 +110,18 @@ def evening_star(klines):
     return results
 
 
-def falling_star(klines,k=3):
+def falling_star(klines, k=3):
     results = []
     for index in range(len(klines)):
         if index < 1:
             continue
-        if (index+1) >= len(klines):
+        if (index + 1) >= len(klines):
             continue;
         today = klines.iloc[index]
         yesterday = klines.iloc[index - 1]
         tomorrow = klines.iloc[index + 1]
 
-        today_upper_line = today['high'] - max(today['open'],today['close'])
+        today_upper_line = today['high'] - max(today['open'], today['close'])
         yesterday_upper_line = yesterday['high'] - max(yesterday['open'], yesterday['close'])
         tomorrow_upper_line = tomorrow['high'] - max(tomorrow['open'], tomorrow['close'])
 
@@ -128,7 +129,7 @@ def falling_star(klines,k=3):
         yesterday_lower_line = min(yesterday['open'], yesterday['close']) - yesterday['low']
         tomorrow_lower_line = min(tomorrow['open'], tomorrow['close']) - tomorrow['low']
 
-        today_body = max(today['open'],today['close']) - min(today['open'], today['close'])
+        today_body = max(today['open'], today['close']) - min(today['open'], today['close'])
         yesterday_body = max(yesterday['open'], yesterday['close']) - min(yesterday['open'], yesterday['close'])
         tomorrow_body = max(tomorrow['open'], tomorrow['close']) - min(tomorrow['open'], tomorrow['close'])
 
