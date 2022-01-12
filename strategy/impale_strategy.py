@@ -1,8 +1,10 @@
 from result import Result
 import talib as ta
 
+from strategy.score import impale_score
 
-def upper_impale(klines,days=7):
+
+def upper_impale(klines, days=7):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -17,7 +19,8 @@ def upper_impale(klines,days=7):
         if today['open'] > today['close']:
             continue;
 
-        if max(yesterday['open'], yesterday['close']) > today['close'] > (0.5 * (yesterday['open'] + yesterday['close'])) \
+        if max(yesterday['open'], yesterday['close']) > today['close'] > (
+                0.5 * (yesterday['open'] + yesterday['close'])) \
                 and today['open'] < yesterday['low']:
 
             satisfy_ma = True
@@ -36,12 +39,14 @@ def upper_impale(klines,days=7):
                     if not satisfy_low:
                         break
                 if satisfy_low:
+                    score = impale_score.upper_impale_score(index, klines)
                     results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale').get_dict())
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale',
+                               intension=score).get_dict())
     return results
 
 
-def lower_impale(klines,days=7):
+def lower_impale(klines, days=7):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -57,7 +62,8 @@ def lower_impale(klines,days=7):
             continue
 
         if today['open'] > yesterday['high'] \
-                and (0.5 * (yesterday['open'] + yesterday['close'])) > today['close'] > min(yesterday['open'],yesterday['close']):
+                and (0.5 * (yesterday['open'] + yesterday['close'])) > today['close'] > min(yesterday['open'],
+                                                                                            yesterday['close']):
 
             satisfy_ma = True
             # 连续days天ma趋势线都是上涨形态
@@ -77,7 +83,9 @@ def lower_impale(klines,days=7):
                     if not satisfy_high:
                         break
                 if satisfy_high:
+                    score = impale_score.lower_impale_score(index, klines)
                     results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale').get_dict())
+                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale',
+                               intension=score).get_dict())
 
     return results
