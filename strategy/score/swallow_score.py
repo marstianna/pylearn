@@ -12,12 +12,16 @@ def swallow_score(today_kline_idx, klines):
             scores += 1
     body_size = today_max / today_min
 
-    if 1.01 <= body_size <= 1.03:
+    if 1.03 <= body_size <= 1.05:
         scores += 1
-    elif 1.03 < body_size <= 1.05:
+    elif 1.05 < body_size <= 1.1:
         scores += 2
-    elif body_size > 1.05:
+    elif body_size > 1.1:
         scores += 3
+    elif 1.03 > body_size >= 1.01:
+        scores -= 1
+    elif body_size < 1.01:
+        scores -= 2
 
     volumes = 0
     for i in range(1, 8):

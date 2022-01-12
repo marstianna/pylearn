@@ -26,7 +26,7 @@ if __name__ == '__main__':
     stocks.extend(kechuang.stocks)
     for stock_code in stocks:
         print("-----------------start:"+stock_code+"-------------------")
-        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2022-01-11')
+        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-11-01', end_date='2022-01-12')
         frame = pd.DataFrame(
             data={'code': stock_code, 'time_key': daily.index.values, 'open': daily['open'], 'close': daily['close'],
                   'high': daily['high'], 'low': daily['low'], 'volume': daily['volume']}).dropna()

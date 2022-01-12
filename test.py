@@ -1,3 +1,6 @@
+from concurrent.futures.thread import ThreadPoolExecutor
+from threading import Barrier
+
 import numpy as np
 
 import pandas as pd
@@ -87,28 +90,48 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
+    RET_OK, ret_frame = quote_ctx.get_user_security("港股")
     results = []
+    executor = ThreadPoolExecutor(max_workers=8)
     for code in ret_frame['code']:
         print("-----------------start:" + code + "-------------------")
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
         tmp = []
-        tmp.extend(test_flat(kline_frame_table))
-        tmp.extend(test_impale(kline_frame_table))
-        tmp.extend(test_hammer(kline_frame_table))
-        tmp.extend(test_swallow(kline_frame_table))
-        tmp.extend(test_star(kline_frame_table))
-        tmp.extend(test_pregnant(kline_frame_table))
-        tmp.extend(test_belt_hold(kline_frame_table))
-        tmp.extend(test_crows(kline_frame_table))
+        pregnant_result = executor.submit(test_pregnant,kline_frame_table)
+        flat_result = executor.submit(test_flat,kline_frame_table)
+        impale_result = executor.submit(test_impale,kline_frame_table)
+        hammer_result = executor.submit(test_hammer,kline_frame_table)
+        swallow_result = executor.submit(test_swallow,kline_frame_table)
+        star_result = executor.submit(test_star,kline_frame_table)
+        belt_hold_result = executor.submit(test_belt_hold,kline_frame_table)
+        crows_result = executor.submit(test_crows,kline_frame_table)
+        # tmp.extend(test_pregnant(kline_frame_table))
+        # tmp.extend(test_flat(kline_frame_table))
+        # tmp.extend(test_impale(kline_frame_table))
+        # tmp.extend(test_hammer(kline_frame_table))
+        # tmp.extend(test_swallow(kline_frame_table))
+        # tmp.extend(test_star(kline_frame_table))
+        # tmp.extend(test_belt_hold(kline_frame_table))
+        # tmp.extend(test_crows(kline_frame_table))
+        # barrier.wait()
+        # print('-----end-----')
+        tmp.extend(pregnant_result.result())
+        tmp.extend(flat_result.result())
+        tmp.extend(impale_result.result())
+        tmp.extend(hammer_result.result())
+        tmp.extend(swallow_result.result())
+        tmp.extend(star_result.result())
+        tmp.extend(belt_hold_result.result())
+        tmp.extend(crows_result.result())
         # compute_profit(ma)
         # today = util.filter_today(tmp)
-        day = util.filter_day(tmp, '2022-01-10')
+        day = util.filter_day(tmp, '2022-01-12')
         for result in day:
             stop_loss([result], tmp, kline_frame_table)
         results.extend(day)
         # results.extend(today)
         # results.extend(tmp)
+    executor.shutdown()
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values)
@@ -121,7 +144,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.XOM')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='HK.00853')
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -162,7 +185,7 @@ def compute_profit(results):
 
 if __name__ == '__main__':
     start = time.time()
-    # test_group()
-    test_single()
+    test_group()
+    # test_single()
     # print(100000*(1.5**12))
     print(int(time.time() - start))
