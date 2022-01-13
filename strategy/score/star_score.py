@@ -16,7 +16,7 @@ def morning_star_score(today_kline_idx,klines):
     tomorrow_min = min(tomorrow['close'], tomorrow['open'])
     tomorrow_body = tomorrow_max - tomorrow_min
 
-    scores = 0
+    scores = 3
 
     # 今天的实体越小越好
     today_low = min(today['open'], today['close'])
@@ -75,7 +75,7 @@ def evening_star_score(today_kline_idx,klines):
     tomorrow_min = min(tomorrow['close'], tomorrow['open'])
     tomorrow_body = tomorrow_max - tomorrow_min
 
-    scores = 0
+    scores = 3
 
     # 今天的实体越小越好
     today_low = min(today['open'], today['close'])

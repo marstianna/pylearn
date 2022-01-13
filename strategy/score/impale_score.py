@@ -9,7 +9,7 @@ def upper_impale_score(today_kline_idx, klines):
     yesterday_min = min(yesterday['close'], yesterday['open'])
     yesterday_body = yesterday_max - yesterday_min
 
-    scores = 0
+    scores = 1
     today_body_size = today_body / today_min
     if 1.03 <= today_body_size <= 1.05:
         scores += 0.5
@@ -62,7 +62,7 @@ def lower_impale_score(today_kline_idx, klines):
     yesterday_min = min(yesterday['close'], yesterday['open'])
     yesterday_body = yesterday_max - yesterday_min
 
-    scores = 0
+    scores = 1
     today_body_size = today_body / today_min
     if 1.03 <= today_body_size <= 1.05:
         scores += 0.5
