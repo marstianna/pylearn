@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0fe83136-c155-4aa5-a291-79082c286361" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/score/impale_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/score/impale_score.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/score/star_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/score/star_score.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/strategy/score/swallow_score.py" beforeDir="false" afterPath="$PROJECT_DIR$/strategy/score/swallow_score.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -197,7 +194,7 @@
       <workItem from="1641349448483" duration="7630000" />
       <workItem from="1641370922815" duration="40192000" />
       <workItem from="1641822739792" duration="8866000" />
-      <workItem from="1641871624589" duration="49521000" />
+      <workItem from="1641871624589" duration="51036000" />
     </task>
     <servers />
   </component>
@@ -248,7 +245,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/pythonProject$test.coverage" NAME="test Coverage Results" MODIFIED="1642067010637" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pythonProject$test.coverage" NAME="test Coverage Results" MODIFIED="1642068148463" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject$plate_data.coverage" NAME="plate_data Coverage Results" MODIFIED="1641355974940" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pythonProject$us.coverage" NAME="us Coverage Results" MODIFIED="1640857429775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/market/us" />
     <SUITE FILE_PATH="coverage/pythonProject$main.coverage" NAME="main Coverage Results" MODIFIED="1641278832335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
