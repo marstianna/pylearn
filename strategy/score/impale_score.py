@@ -1,5 +1,5 @@
 # 穿透模型里面,评分包含三个部分:1.穿透的昨天的实体大小以及今天的实体大小 2.穿透的百分比 3.成交量
-def upper_impale_score(today_kline_idx,klines):
+def upper_impale_score(today_kline_idx, klines):
     today = klines.iloc[today_kline_idx]
     today_max = max(today['close'], today['open'])
     today_min = min(today['close'], today['open'])
@@ -28,7 +28,7 @@ def upper_impale_score(today_kline_idx,klines):
 
     impale_body = today_max - yesterday_min
     impale_body_size = impale_body / yesterday_body
-    if 0.5<= impale_body_size <=0.7:
+    if 0.5 <= impale_body_size <= 0.7:
         scores += 1
     elif 0.7 < impale_body_size < 1:
         scores += 2

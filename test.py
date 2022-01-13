@@ -96,6 +96,8 @@ def test_group():
     for code in ret_frame['code']:
         print("-----------------start:" + code + "-------------------")
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
+        if RET_OK != 0:
+            continue
         tmp = []
         pregnant_result = executor.submit(test_pregnant,kline_frame_table)
         flat_result = executor.submit(test_flat,kline_frame_table)
@@ -125,7 +127,7 @@ def test_group():
         tmp.extend(crows_result.result())
         # compute_profit(ma)
         # today = util.filter_today(tmp)
-        day = util.filter_day(tmp, '2022-01-12')
+        day = util.filter_day(tmp, '2022-01-13')
         for result in day:
             stop_loss([result], tmp, kline_frame_table)
         results.extend(day)
@@ -144,7 +146,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='SH.603229')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='HK.01109')
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -185,7 +187,7 @@ def compute_profit(results):
 
 if __name__ == '__main__':
     start = time.time()
-    test_group()
-    # test_single()
+    # test_group()
+    test_single()
     # print(100000*(1.5**12))
     print(int(time.time() - start))
