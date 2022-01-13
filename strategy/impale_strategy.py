@@ -42,7 +42,7 @@ def upper_impale(klines, days=7):
                     score = impale_score.upper_impale_score(index, klines)
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale',
-                               intension=score).get_dict())
+                               intension=score))
     return results
 
 
@@ -86,6 +86,6 @@ def lower_impale(klines, days=7):
                     score = impale_score.lower_impale_score(index, klines)
                     results.append(
                         Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale',
-                               intension=score).get_dict())
+                               intension=score))
 
     return results

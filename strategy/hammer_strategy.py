@@ -41,7 +41,7 @@ def define_upper_hammer(klines, k=0.4):
                         'low'] < klines.iloc[index - 5]['low']:
                         score = hammer_score.hammer_score(index, klines)
                         hammers.append(Result(klines.iloc[index]['code'], 'BUY', klines.iloc[index]['close'],
-                                              klines.iloc[index]['time_key'], 'hammer', intension=score).get_dict())
+                                              klines.iloc[index]['time_key'], 'hammer', intension=score))
     return hammers
 
 
@@ -90,7 +90,7 @@ def define_lower_hammer(klines, k=0.3):
                     if satisfy_high:
                         score = hammer_score.hammer_score(index, klines)
                         hammers.append(Result(klines.iloc[index]['code'], 'SELL', klines.iloc[index]['close'],
-                                              klines.iloc[index]['time_key'], 'hammer', intension=score).get_dict())
+                                              klines.iloc[index]['time_key'], 'hammer', intension=score))
     return hammers
 
 
@@ -128,5 +128,5 @@ def handstand_lower_hammer(klines, k=3):
                     score = hammer_score.handstand_hammer_score(index, klines)
                     hammers.append(Result(klines.iloc[index]['code'], 'SELL', klines.iloc[index]['close'],
                                           klines.iloc[index]['time_key'], 'handstand_hammer',
-                                          intension=score).get_dict())
+                                          intension=score))
     return hammers

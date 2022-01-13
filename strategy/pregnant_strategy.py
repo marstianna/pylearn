@@ -26,7 +26,7 @@ def upper_pregnant(klines,days=5,k=3):
                     break;
             if satisfy_ma:
                 results.append(
-                    Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_pregnant').get_dict())
+                    Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_pregnant'))
     return results
 
 def lower_pregnant(klines,days=5,k=3):
@@ -54,5 +54,5 @@ def lower_pregnant(klines,days=5,k=3):
                     break;
             if satisfy_ma:
                 results.append(
-                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_pregnant').get_dict())
+                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_pregnant'))
     return results

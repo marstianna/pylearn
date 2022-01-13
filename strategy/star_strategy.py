@@ -54,7 +54,7 @@ def morning_star(klines):
                 if satisfy_low:
                     score = star_score.morning_star_score(index, klines)
                     results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'morning_star',intension=score).get_dict())
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'morning_star',intension=score))
     return results
 
 
@@ -110,7 +110,7 @@ def evening_star(klines):
                 if satisfy_high:
                     scores = star_score.evening_star_score(index,klines)
                     results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'evening_star',intension=scores).get_dict())
+                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'evening_star',intension=scores))
 
     return results
 
@@ -151,5 +151,5 @@ def falling_star(klines, k=3):
         if tomorrow_upper_line < tomorrow_body:
             continue
         results.append(
-            Result(today['code'], 'SELL', today['close'], today['time_key'], 'falling_star').get_dict())
+            Result(today['code'], 'SELL', today['close'], today['time_key'], 'falling_star'))
     return results

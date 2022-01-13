@@ -6,20 +6,20 @@ def recall_buy(target_result, total_results,klines, target_recall_day):
     results = []
     for result_idx in range(len(total_results)):
         result = total_results[result_idx]
-        if result['date'] == target_result['date']:
+        if result.date == target_result.date:
             for recall_idx in range(len(total_results)):
                 recall_result = total_results[recall_idx]
-                start_time = datetime.datetime.strptime(recall_result['date'], "%Y-%m-%d %H:%M:%S")
+                start_time = datetime.datetime.strptime(recall_result.date, "%Y-%m-%d %H:%M:%S")
                 end_time = start_time + datetime.timedelta(
                     days=target_recall_day)
-                result_time = datetime.datetime.strptime(result['date'], "%Y-%m-%d %H:%M:%S")
+                result_time = datetime.datetime.strptime(result.date, "%Y-%m-%d %H:%M:%S")
                 if end_time >= result_time >= start_time and check_bottom(recall_result):
                     results.append(recall_result)
     return calculate_avg(results,klines,1)
 
 
 def check_bottom(result):
-    return result['action'] == 'BUY' and (result['strategy'] == 'swallow' or result['strategy'] == 'upper_impale' or result['strategy'] == 'morning_star')
+    return result.action == 'BUY' and (result.strategy == 'swallow' or result.strategy == 'upper_impale' or result.strategy == 'morning_star')
 
 
 def calculate_avg(results,klines,action):
@@ -28,7 +28,7 @@ def calculate_avg(results,klines,action):
     total_price = 0.0
     for k_idx in range(len(klines)):
         for result in results:
-            if klines.iloc[k_idx]['time_key'] == result['date']:
+            if klines.iloc[k_idx]['time_key'] == result.date:
                 total_price += klines.iloc[k_idx]['low' if action == 1 else 'high']
     return total_price/len(results)
 
@@ -37,21 +37,18 @@ def recall_sell(target_result,total_results,klines,target_recall_day):
     results = []
     for result_idx in range(len(total_results)):
         result = total_results[result_idx]
-        if result['date'] == target_result['date']:
+        if result.date == target_result.date:
             for recall_idx in range(len(total_results)):
                 recall_result = total_results[recall_idx]
-                start_time = datetime.datetime.strptime(recall_result['date'], "%Y-%m-%d %H:%M:%S")
+                start_time = datetime.datetime.strptime(recall_result.date, "%Y-%m-%d %H:%M:%S")
                 end_time = start_time + datetime.timedelta(
                     days=target_recall_day)
-                result_time = datetime.datetime.strptime(result['date'], "%Y-%m-%d %H:%M:%S")
+                result_time = datetime.datetime.strptime(result.date, "%Y-%m-%d %H:%M:%S")
                 if end_time >= result_time >= start_time and check_head(recall_result):
                     results.append(recall_result)
     return calculate_avg(results, klines, 0)
 
 
 def check_head(result):
-    return result['action'] == 'SELL' and (
-                result['strategy'] == 'swallow' or result['strategy'] == 'lower_impale' or result[
-            'strategy'] == 'evening_star' or result[
-            'strategy'] == 'falling_star' or result[
-            'strategy'] == 'handstand_hammer')
+    return result.action == 'SELL' and (
+                result.strategy == 'swallow' or result.strategy == 'lower_impale' or result.strategy == 'evening_star' or result.strategy == 'falling_star' or result.strategy == 'handstand_hammer')

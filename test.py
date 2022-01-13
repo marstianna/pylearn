@@ -1,4 +1,5 @@
 from concurrent.futures.thread import ThreadPoolExecutor
+from operator import attrgetter, itemgetter
 from threading import Barrier
 
 import numpy as np
@@ -78,7 +79,7 @@ def test_crows(klines):
 
 def stop_loss(today_results, results, kline):
     random = today_results[0]
-    if random['action'] == 'BUY':
+    if random.action == 'BUY':
         bottom_stop_loss_line.bottom_stop_loss_line(random, results, kline, 7)
     else:
         head_stop_loss_line.head_stop_loss_line(random, results, kline, 12)
@@ -127,10 +128,13 @@ def test_group():
         tmp.extend(crows_result.result())
         # compute_profit(ma)
         # today = util.filter_today(tmp)
-        day = util.filter_day(tmp, '2022-01-13')
-        for result in day:
+        tmp.sort(key=lambda res: res.date)
+        compute_profit(tmp)
+        # day = util.filter_last_day(tmp)
+        for result in tmp:
             stop_loss([result], tmp, kline_frame_table)
-        results.extend(day)
+        for result in tmp:
+            results.append(result.get_dict())
         # results.extend(today)
         # results.extend(tmp)
     executor.shutdown()
@@ -146,7 +150,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.LI')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.AAPL')
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -160,34 +164,48 @@ def test_single():
     for result in tmp:
         stop_loss([result], tmp, kline_frame_table)
     # today = util.filter_today(tmp)
+    tmp.sort(key=lambda res: res.date)
+    compute_profit(tmp)
+    results = []
+    for result in tmp:
+        results.append(result.get_dict())
 
-
-    frame = pd.DataFrame(tmp, columns=Result.columns)
-    frame = frame.sort_values(by=['stock_code', 'date'])
+    frame = pd.DataFrame(results)
+    # frame = frame.sort_values(by=['stock_code', 'date'])
     print(frame)
     quote_ctx.close()
 
 
 def compute_profit(results):
     profit = 0
+    current_hold = 0
+    buy_pre_time = 100
     buy_price = -1
     for result in results:
-        if buy_price == -1 and result['action'] == 'SELL':
+        if buy_price == -1 and result.action == 'SELL':
+            result.profit = profit
             continue
-        if result['action'] == 'BUY':
+        if result.action == 'BUY':
             if buy_price == -1:
-                buy_price = result['price']
+                buy_price = result.price
+                current_hold += buy_pre_time
             else:
-                buy_price = (result['price'] + buy_price) / 2
-        if result['action'] == 'SELL':
-            profit += (result['price'] - buy_price) / buy_price
-            buy_price = -1
-        result['profit'] = profit
+                buy_price = (result.price * buy_pre_time + buy_price * current_hold) / (buy_pre_time + current_hold)
+                current_hold += buy_pre_time
+        if result.action == 'SELL':
+            if current_hold > 0:
+                profit += (result.price - buy_price) / buy_price
+                current_hold -= 100
+                if current_hold == 0:
+                    buy_price = -1
+
+        result.profit = profit
+        result.current_hold = current_hold
 
 
 if __name__ == '__main__':
     start = time.time()
-    # test_group()
-    test_single()
+    test_group()
+    # test_single()
     # print(100000*(1.5**12))
     print(int(time.time() - start))

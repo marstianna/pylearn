@@ -39,7 +39,7 @@ def two_crows(klines):
                     break
             if satisfy_ma:
                 results.append(
-                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'two_crows').get_dict())
+                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'two_crows'))
     return results
 
 

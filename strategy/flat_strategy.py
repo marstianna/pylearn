@@ -47,7 +47,7 @@ def flat_head(klines,days=7,k=0.005):
                         break
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'flat_head').get_dict())
+                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'flat_head'))
     return results
 
 
@@ -93,5 +93,5 @@ def flat_bottom(klines,days=7,k=0.005):
                         break
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom').get_dict())
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom'))
     return results

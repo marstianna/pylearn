@@ -40,7 +40,7 @@ def upper_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
                 if satisfy_low:
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'],
-                               'upper_belt_hold_line').get_dict())
+                               'upper_belt_hold_line'))
     return results
 
 
@@ -80,5 +80,5 @@ def lower_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
                         break
                 if satisfy_high:
                     results.append(Result(today['code'], 'SELL', today['close'], today['time_key'],
-                                          'lower_belt_hold_line').get_dict())
+                                          'lower_belt_hold_line'))
     return results
