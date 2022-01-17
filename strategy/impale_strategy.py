@@ -1,10 +1,11 @@
+import days_constant
 from result import Result
 import talib as ta
 
 from strategy.score import impale_score
 
 
-def upper_impale(klines, days=7):
+def upper_impale(klines, days=days_constant.day_5):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -46,7 +47,7 @@ def upper_impale(klines, days=7):
     return results
 
 
-def lower_impale(klines, days=7):
+def lower_impale(klines, days=days_constant.day_5):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

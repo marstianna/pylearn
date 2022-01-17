@@ -2,6 +2,7 @@ import talib as ta
 import pandas as pd
 
 # 当前upper和lower都存在一个如果实体(body)过小的情况下会导致命中逻辑不够精确的问题
+import days_constant
 from result import Result
 from strategy.score import hammer_score
 
@@ -47,7 +48,7 @@ def define_upper_hammer(klines, k=0.4):
 
 def define_lower_hammer(klines, k=0.3):
     hammers = []
-    days = 12
+    days = days_constant.day_7
     ma = ta.MA(klines['close'], timeperiod=days)
     for index in range(len(klines)):
         if index < days:

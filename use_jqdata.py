@@ -26,7 +26,7 @@ if __name__ == '__main__':
     stocks.extend(kechuang.stocks)
     for stock_code in stocks:
         print("-----------------start:"+stock_code+"-------------------")
-        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-12-01', end_date='2022-01-13')
+        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-12-01', end_date='2022-01-14')
         frame = pd.DataFrame(
             data={'code': stock_code, 'time_key': daily.index.values, 'open': daily['open'], 'close': daily['close'],
                   'high': daily['high'], 'low': daily['low'], 'volume': daily['volume']}).dropna()
@@ -41,6 +41,8 @@ if __name__ == '__main__':
         tmp.extend(test.test_flat(frame))
         tmp.extend(test.test_crows(frame))
         tmp.extend(test.test_belt_hold(frame))
+        tmp.sort(key=lambda res: res.date)
+        test.compute_profit(tmp)
         today = util.filter_timestamp_day(tmp)
         # for result in today:
         #     test.stop_loss([result], tmp, frame)
@@ -48,7 +50,10 @@ if __name__ == '__main__':
         # if len(today) > 0:
         #     print(pd.DataFrame(today, columns=Result.columns))
         #     results.extend(today)
-    print(pd.DataFrame(results,columns=Result.columns).sort_values(by=['date']))
+    convert_results = []
+    for result in results:
+        convert_results.append(result.get_dict())
+    print(pd.DataFrame(convert_results,columns=Result.columns))
     print("Cost time:"+str(time.time()-start_time))
 
 

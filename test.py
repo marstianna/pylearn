@@ -91,7 +91,7 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("港股")
+    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
     results = []
     executor = ThreadPoolExecutor(max_workers=8)
     for code in ret_frame['code']:
@@ -127,13 +127,13 @@ def test_group():
         tmp.extend(belt_hold_result.result())
         tmp.extend(crows_result.result())
         # compute_profit(ma)
-        # today = util.filter_today(tmp)
         tmp.sort(key=lambda res: res.date)
         compute_profit(tmp)
-        # day = util.filter_last_day(tmp)
-        for result in tmp:
-            stop_loss([result], tmp, kline_frame_table)
-        for result in tmp:
+        # today = util.filter_day(tmp,'2022-01-14')
+        today = util.filter_last_day(tmp)
+        # for result in tmp:
+        #     stop_loss([result], tmp, kline_frame_table)
+        for result in today:
             results.append(result.get_dict())
         # results.extend(today)
         # results.extend(tmp)
@@ -141,6 +141,7 @@ def test_group():
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values)
+    print(values['profit'].mean())
     quote_ctx.close()
 
 
@@ -150,7 +151,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.AAPL')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.MRNA')
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -201,11 +202,12 @@ def compute_profit(results):
 
         result.profit = profit
         result.current_hold = current_hold
+        result.avg_price = buy_price
 
 
 if __name__ == '__main__':
     start = time.time()
-    test_group()
-    # test_single()
+    # test_group()
+    test_single()
     # print(100000*(1.5**12))
     print(int(time.time() - start))

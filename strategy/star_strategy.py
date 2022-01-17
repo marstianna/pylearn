@@ -1,3 +1,4 @@
+import days_constant
 from result import Result
 import talib as ta
 
@@ -7,7 +8,7 @@ from strategy.score import star_score
 
 
 def morning_star(klines):
-    days = 5
+    days = days_constant.day_5
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -59,7 +60,7 @@ def morning_star(klines):
 
 
 def evening_star(klines):
-    days = 5
+    days = days_constant.day_5
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

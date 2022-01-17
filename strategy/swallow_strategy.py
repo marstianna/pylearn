@@ -1,5 +1,6 @@
 import talib as ta
 
+import days_constant
 from result import Result
 
 # 吞没形态还需要考虑命中当天的成交量的情况,如果出现对应的放量,那么认为形态有效
@@ -8,7 +9,7 @@ from strategy.score import swallow_score
 
 
 def upper_swallow_lower(klines):
-    days = 7
+    days = days_constant.day_5
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -51,7 +52,7 @@ def upper_swallow_lower(klines):
 
 
 def lower_swallow_upper(klines):
-    days = 7
+    days = days_constant.day_5
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

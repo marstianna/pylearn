@@ -1,11 +1,12 @@
 import talib as ta
 import math
 
+from days_constant import day_5, day_7
 from result import Result
 
 
 #平头顶
-def flat_head(klines,days=7,k=0.005):
+def flat_head(klines,days=day_7,k=0.005):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -51,7 +52,7 @@ def flat_head(klines,days=7,k=0.005):
     return results
 
 
-def flat_bottom(klines,days=7,k=0.005):
+def flat_bottom(klines,days=day_7,k=0.005):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

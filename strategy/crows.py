@@ -1,10 +1,11 @@
 import talib as ta
 
+from days_constant import day_5
 from result import Result
 
 
 def two_crows(klines):
-    days = 5
+    days = day_5
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
