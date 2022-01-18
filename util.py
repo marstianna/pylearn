@@ -11,13 +11,14 @@ def filter_day(results, day):
     if s not in day:
         day = day + s
     for result in results:
-        if result.date == day:
+        if str(result.date) == day:
             new_results.append(result)
     return new_results
 
-def filter_timestamp_day(results, day=datetime.datetime.now().strftime('%Y-%m-%d')):
+
+def filter_timestamp_day(results, day=str(datetime.datetime.now().strftime('%Y-%m-%d'))):
     new_results = []
-    day = day + " 00:00:00";
+    day = day + " 00:00:00"
     for result in results:
         if str(result.date) == day:
             new_results.append(result)

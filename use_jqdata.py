@@ -42,8 +42,11 @@ if __name__ == '__main__':
         tmp.extend(test.test_crows(frame))
         tmp.extend(test.test_belt_hold(frame))
         tmp.sort(key=lambda res: res.date)
-        test.compute_profit(tmp)
-        today = util.filter_timestamp_day(tmp)
+        test.compute_profit_score(tmp)
+        if len(tmp) <= 0:
+            continue
+        # today = util.filter_last_day(tmp)
+        today = util.filter_day(tmp,'2022-01-18')
         # for result in today:
         #     test.stop_loss([result], tmp, frame)
         results.extend(today)

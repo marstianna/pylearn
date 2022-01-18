@@ -128,8 +128,9 @@ def test_group():
         tmp.extend(crows_result.result())
         # compute_profit(ma)
         tmp.sort(key=lambda res: res.date)
-        compute_profit(tmp)
-        # today = util.filter_day(tmp,'2022-01-14')
+        # compute_profit(tmp)
+        compute_profit_score(tmp)
+        # today = util.filter_day(tmp,'2022-01-17')
         today = util.filter_last_day(tmp)
         # for result in tmp:
         #     stop_loss([result], tmp, kline_frame_table)
@@ -151,7 +152,7 @@ def test_single():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.MRNA')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.XOM')
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -166,7 +167,8 @@ def test_single():
         stop_loss([result], tmp, kline_frame_table)
     # today = util.filter_today(tmp)
     tmp.sort(key=lambda res: res.date)
-    compute_profit(tmp)
+    compute_profit_score(tmp)
+    # compute_profit(tmp)
     results = []
     for result in tmp:
         results.append(result.get_dict())
@@ -195,9 +197,43 @@ def compute_profit(results):
                 current_hold += buy_pre_time
         if result.action == 'SELL':
             if current_hold > 0:
-                profit += (result.price - buy_price) / buy_price
+                profit += (result.price - buy_price) * buy_pre_time
                 current_hold -= 100
                 if current_hold == 0:
+                    buy_price = -1
+
+        result.profit = profit
+        result.current_hold = current_hold
+        result.avg_price = buy_price
+
+
+def compute_profit_score(results):
+    profit = 0
+    current_hold = 0
+    trade_pre_time = 100
+    buy_price = -1
+    for result in results:
+        if result.intension == 0:
+            result.profit = profit
+            result.current_hold = current_hold
+            result.avg_price = buy_price
+            continue
+        if buy_price == -1 and result.action == 'SELL':
+            result.profit = profit
+            continue
+        if result.action == 'BUY':
+            if buy_price == -1:
+                buy_price = result.price
+                current_hold += trade_pre_time * result.intension
+            else:
+                buy_price = (result.price * trade_pre_time * result.intension + buy_price * current_hold) / (trade_pre_time * result.intension + current_hold)
+                current_hold += trade_pre_time * result.intension
+        if result.action == 'SELL':
+            if current_hold > 0:
+                profit += (result.price - buy_price) * trade_pre_time * result.intension
+                current_hold -= trade_pre_time * result.intension
+                if current_hold <= 0:
+                    current_hold = 0
                     buy_price = -1
 
         result.profit = profit

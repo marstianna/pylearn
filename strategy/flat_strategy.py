@@ -1,7 +1,7 @@
 import talib as ta
 import math
 
-from days_constant import day_5, day_7
+from constant import day_5, day_7
 from result import Result
 
 

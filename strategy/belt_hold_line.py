@@ -1,6 +1,6 @@
 import talib as ta
 
-from days_constant import day_5
+from constant import day_5
 from result import Result
 
 
