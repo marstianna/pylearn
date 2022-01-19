@@ -1,6 +1,7 @@
 import talib as ta
 import math
 
+import constant
 from constant import day_5, day_7
 from result import Result
 
@@ -48,7 +49,7 @@ def flat_head(klines,days=day_7,k=0.005):
                         break
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'flat_head'))
+                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'flat_head',intension=constant.default_scores))
     return results
 
 
@@ -94,5 +95,5 @@ def flat_bottom(klines,days=day_7,k=0.005):
                         break
                 if satisfy_low:
                     results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom'))
+                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'flat_bottom',intension=constant.default_scores))
     return results

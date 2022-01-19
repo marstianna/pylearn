@@ -1,5 +1,6 @@
 import talib as ta
 
+import constant
 from constant import day_5
 from result import Result
 
@@ -41,7 +42,7 @@ def upper_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
                 if satisfy_low:
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'],
-                               'upper_belt_hold_line'))
+                               'upper_belt_hold_line',intension=constant.default_scores))
     return results
 
 
@@ -58,7 +59,7 @@ def lower_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
         if today['open'] < today['close']:
             continue
 
-        if today['open'] * (1-0.05) < today['close']:
+        if today['open'] * (1-0.02) < today['close']:
             continue
 
         if today['close'] * (1 - k_lower_shadow_line) <= today['low'] and today['open'] * (1 + k_upper_shadow_line) >= \
@@ -81,5 +82,5 @@ def lower_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
                         break
                 if satisfy_high:
                     results.append(Result(today['code'], 'SELL', today['close'], today['time_key'],
-                                          'lower_belt_hold_line'))
+                                          'lower_belt_hold_line',intension=constant.default_scores))
     return results

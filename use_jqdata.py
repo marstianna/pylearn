@@ -20,10 +20,10 @@ if __name__ == '__main__':
     results = []
     start_time = time.time()
     stocks = []
-    stocks.extend(shanghai_a.stocks)
-    stocks.extend(shenzhen_a.stocks)
-    stocks.extend(chuangye.stocks)
-    stocks.extend(kechuang.stocks)
+    # stocks.extend(shanghai_a.stocks)
+    # stocks.extend(shenzhen_a.stocks)
+    # stocks.extend(chuangye.stocks)
+    # stocks.extend(kechuang.stocks)
     for stock_code in stocks:
         print("-----------------start:"+stock_code+"-------------------")
         daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-12-01', end_date='2022-01-14')
@@ -46,10 +46,10 @@ if __name__ == '__main__':
         if len(tmp) <= 0:
             continue
         # today = util.filter_last_day(tmp)
-        today = util.filter_day(tmp,'2022-01-18')
+        # today = util.filter_day(tmp,'2022-01-12')
         # for result in today:
         #     test.stop_loss([result], tmp, frame)
-        results.extend(today)
+        results.extend(tmp)
         # if len(today) > 0:
         #     print(pd.DataFrame(today, columns=Result.columns))
         #     results.extend(today)

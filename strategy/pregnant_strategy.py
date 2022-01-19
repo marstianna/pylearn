@@ -1,3 +1,4 @@
+import constant
 from result import Result
 import talib as ta
 
@@ -26,7 +27,7 @@ def upper_pregnant(klines,days=5,k=3):
                     break;
             if satisfy_ma:
                 results.append(
-                    Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_pregnant'))
+                    Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_pregnant',intension=constant.default_scores))
     return results
 
 def lower_pregnant(klines,days=5,k=3):
@@ -54,5 +55,5 @@ def lower_pregnant(klines,days=5,k=3):
                     break;
             if satisfy_ma:
                 results.append(
-                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_pregnant'))
+                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_pregnant',intension=constant.default_scores))
     return results

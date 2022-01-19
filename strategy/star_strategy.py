@@ -152,5 +152,5 @@ def falling_star(klines, k=3):
         if tomorrow_upper_line < tomorrow_body:
             continue
         results.append(
-            Result(today['code'], 'SELL', today['close'], today['time_key'], 'falling_star'))
+            Result(today['code'], 'SELL', today['close'], today['time_key'], 'falling_star',intension=constant.default_scores))
     return results

@@ -1,5 +1,6 @@
 import talib as ta
 
+import constant
 from constant import day_5
 from result import Result
 
@@ -40,10 +41,26 @@ def two_crows(klines):
                     break
             if satisfy_ma:
                 results.append(
-                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'two_crows'))
+                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'two_crows',intension=constant.default_scores))
     return results
 
 
 def three_crows(klines):
     results = []
+    for index in range(len(klines)):
+        today = klines.iloc[index]
+        yesterday = klines.iloc[index - 1]
+        day_before_yesterday = klines.iloc[index - 2]
+
+        if today['open'] < today['close']:
+            continue
+        if yesterday['open'] < yesterday['close']:
+            continue
+        if day_before_yesterday['open'] < day_before_yesterday['close']:
+            continue
+        if today['open'] < yesterday['open'] < day_before_yesterday['open'] and today['close'] < yesterday['close'] < day_before_yesterday['close']:
+            # 三只乌鸦一旦出现直接清仓
+            results.append(
+                Result(today['code'], 'SELL', today['close'], today['time_key'], 'three_crows',
+                       intension=0))
     return results

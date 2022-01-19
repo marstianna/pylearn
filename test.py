@@ -7,8 +7,9 @@ import numpy as np
 import pandas as pd
 import futu as ft
 
+import constant
 from strategy import flat_strategy, hammer_strategy, impale_strategy, pregnant_strategy, swallow_strategy, \
-    star_strategy, belt_hold_line, crows
+    star_strategy, belt_hold_line, crows, windows
 from indicator import ma_strategy
 import main
 import util
@@ -77,6 +78,12 @@ def test_crows(klines):
     results.extend(crows.three_crows(klines))
     return results
 
+
+def test_windows(klines):
+    results = windows.lower_windows(klines)
+    results.extend(windows.upper_windows(klines))
+    return results
+
 def stop_loss(today_results, results, kline):
     random = today_results[0]
     if random.action == 'BUY':
@@ -93,52 +100,25 @@ def test_group():
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
     RET_OK, ret_frame = quote_ctx.get_user_security("美股")
     results = []
-    executor = ThreadPoolExecutor(max_workers=8)
     for code in ret_frame['code']:
         print("-----------------start:" + code + "-------------------")
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
         if RET_OK != 0:
             continue
-        tmp = []
-        pregnant_result = executor.submit(test_pregnant,kline_frame_table)
-        flat_result = executor.submit(test_flat,kline_frame_table)
-        impale_result = executor.submit(test_impale,kline_frame_table)
-        hammer_result = executor.submit(test_hammer,kline_frame_table)
-        swallow_result = executor.submit(test_swallow,kline_frame_table)
-        star_result = executor.submit(test_star,kline_frame_table)
-        belt_hold_result = executor.submit(test_belt_hold,kline_frame_table)
-        crows_result = executor.submit(test_crows,kline_frame_table)
-        # tmp.extend(test_pregnant(kline_frame_table))
-        # tmp.extend(test_flat(kline_frame_table))
-        # tmp.extend(test_impale(kline_frame_table))
-        # tmp.extend(test_hammer(kline_frame_table))
-        # tmp.extend(test_swallow(kline_frame_table))
-        # tmp.extend(test_star(kline_frame_table))
-        # tmp.extend(test_belt_hold(kline_frame_table))
-        # tmp.extend(test_crows(kline_frame_table))
-        # barrier.wait()
-        # print('-----end-----')
-        tmp.extend(pregnant_result.result())
-        tmp.extend(flat_result.result())
-        tmp.extend(impale_result.result())
-        tmp.extend(hammer_result.result())
-        tmp.extend(swallow_result.result())
-        tmp.extend(star_result.result())
-        tmp.extend(belt_hold_result.result())
-        tmp.extend(crows_result.result())
+        tmp = execute_strategies(kline_frame_table)
+
         # compute_profit(ma)
         tmp.sort(key=lambda res: res.date)
         # compute_profit(tmp)
         compute_profit_score(tmp)
-        # today = util.filter_day(tmp,'2022-01-17')
-        today = util.filter_last_day(tmp)
+        today = util.filter_day(tmp,'2022-01-14')
+        # today = util.filter_last_day(tmp)
         # for result in tmp:
         #     stop_loss([result], tmp, kline_frame_table)
         for result in today:
             results.append(result.get_dict())
         # results.extend(today)
         # results.extend(tmp)
-    executor.shutdown()
     t = pd.DataFrame(results, columns=Result.columns)
     values = t.sort_values(by=['stock_code', 'date'])
     print(values)
@@ -151,8 +131,35 @@ def test_single():
     pd.set_option('display.max_rows', 10000)
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
+    pd.set_option('display.float_format', lambda x: ' % .2f' % x)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.XOM')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.AAPL',start='2021-01-01',end='2022-01-18')
+    days = [2]
+    # days = [1,2,3,5,7,12,26,50,120]
+    tmp_default_scores = [0,1,2]
+    for idx in days:
+        constant.day_5 = idx
+        tmp = execute_strategies(kline_frame_table)
+
+        for result in tmp:
+            stop_loss([result], tmp, kline_frame_table)
+        # today = util.filter_today(tmp)
+        tmp.sort(key=lambda res: res.date)
+        compute_profit_score(tmp)
+        # compute_profit(tmp)
+        results = []
+        # results = [tmp[len(tmp)-1].get_dict()]
+        for result in tmp:
+            results.append(result.get_dict())
+
+        frame = pd.DataFrame(results)
+        # frame = frame.sort_values(by=['stock_code', 'date'])
+        print('------------------'+str(idx)+'-------------------')
+        print(frame)
+    quote_ctx.close()
+
+
+def execute_strategies(kline_frame_table):
     tmp = []
     tmp.extend(test_flat(kline_frame_table))
     tmp.extend(test_impale(kline_frame_table))
@@ -162,27 +169,14 @@ def test_single():
     tmp.extend(test_pregnant(kline_frame_table))
     tmp.extend(test_belt_hold(kline_frame_table))
     tmp.extend(test_crows(kline_frame_table))
-
-    for result in tmp:
-        stop_loss([result], tmp, kline_frame_table)
-    # today = util.filter_today(tmp)
-    tmp.sort(key=lambda res: res.date)
-    compute_profit_score(tmp)
-    # compute_profit(tmp)
-    results = []
-    for result in tmp:
-        results.append(result.get_dict())
-
-    frame = pd.DataFrame(results)
-    # frame = frame.sort_values(by=['stock_code', 'date'])
-    print(frame)
-    quote_ctx.close()
+    tmp.extend(test_windows(kline_frame_table))
+    return tmp
 
 
 def compute_profit(results):
     profit = 0
     current_hold = 0
-    buy_pre_time = 100
+    buy_pre_time = 10
     buy_price = -1
     for result in results:
         if buy_price == -1 and result.action == 'SELL':
@@ -210,10 +204,10 @@ def compute_profit(results):
 def compute_profit_score(results):
     profit = 0
     current_hold = 0
-    trade_pre_time = 100
+    trade_pre_time = 10
     buy_price = -1
     for result in results:
-        if result.intension == 0:
+        if result.intension <= 0:
             result.profit = profit
             result.current_hold = current_hold
             result.avg_price = buy_price
@@ -230,8 +224,9 @@ def compute_profit_score(results):
                 current_hold += trade_pre_time * result.intension
         if result.action == 'SELL':
             if current_hold > 0:
-                profit += (result.price - buy_price) * trade_pre_time * result.intension
-                current_hold -= trade_pre_time * result.intension
+                actual_sell = min(current_hold,trade_pre_time * result.intension)
+                profit += (result.price - buy_price) * actual_sell
+                current_hold -= actual_sell
                 if current_hold <= 0:
                     current_hold = 0
                     buy_price = -1
