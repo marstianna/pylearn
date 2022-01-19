@@ -178,6 +178,8 @@ def test_group():
     results = []
     for code in ret_frame['code']:
         RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code=code)
+        if RET_OK != 0:
+            continue
         cuda = get_result_from_cuda(kline_frame_table)
         results.extend(util.filter_today(cuda))
 

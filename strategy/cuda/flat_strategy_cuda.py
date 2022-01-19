@@ -48,7 +48,7 @@ def flat_head(open,close,high,low,ma_5,results,days=5,k=0.005):
                     satisfy_low = False
                     break
             if satisfy_low:
-                results[index][0]=1
+                results[index][0]=0
                 results[index][1]=index
 
 @cuda.jit
@@ -90,5 +90,5 @@ def flat_bottom(open,close,high,low,ma_5,results,days=5,k=0.005):
                     satisfy_low = False
                     break
             if satisfy_low:
-                results[index][0] = 0
+                results[index][0] = 1
                 results[index][1] = index
