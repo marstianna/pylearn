@@ -84,6 +84,7 @@ def test_windows(klines):
     results.extend(windows.upper_windows(klines))
     return results
 
+
 def stop_loss(today_results, results, kline):
     random = today_results[0]
     if random.action == 'BUY':
@@ -133,7 +134,7 @@ def test_single():
     pd.set_option('display.width', 1000)
     pd.set_option('display.float_format', lambda x: ' % .2f' % x)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.AAPL',start='2021-01-01',end='2022-01-18')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.AMD',start='2021-01-01',end='2022-01-18')
     days = [2]
     # days = [1,2,3,5,7,12,26,50,120]
     tmp_default_scores = [0,1,2]
