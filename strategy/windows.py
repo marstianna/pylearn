@@ -3,11 +3,22 @@ from result import Result
 from strategy.score import window_score
 
 
-def lower_broken_windows(klines):
+def lower_broken_windows(klines,windows):
+    results = []
+    if len(windows) == 0:
+        return results
     pass
 
 
-def upper_broken_windows(klines):
+def upper_broken_windows(klines,windows):
+    results = []
+    if len(windows) == 0:
+        return results
+    for idx in range(len(klines)):
+        today = klines.iloc[idx]
+        for window in windows:
+            if window.date == today['time_key']:
+                pass
     pass
 
 
