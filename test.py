@@ -134,10 +134,10 @@ def test_single():
     pd.set_option('display.width', 1000)
     pd.set_option('display.float_format', lambda x: ' % .2f' % x)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='US.AMD',start='2021-01-01',end='2022-01-18')
-    days = [2]
-    # days = [1,2,3,5,7,12,26,50,120]
-    tmp_default_scores = [0,1,2]
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='HK.00388',start='2021-01-01',end='2022-01-18')
+    # days = [5]
+    days = [1,2,3,5,7,12,26,50,120]
+
     for idx in days:
         constant.day_5 = idx
         tmp = execute_strategies(kline_frame_table)
@@ -205,7 +205,7 @@ def compute_profit(results):
 def compute_profit_score(results):
     profit = 0
     current_hold = 0
-    trade_pre_time = 10
+    trade_pre_time = 100
     buy_price = -1
     for result in results:
         if result.intension <= 0:

@@ -3,6 +3,7 @@ import talib as ta
 import constant
 from constant import day_5
 from result import Result
+from strategy.score import crows_score
 
 
 def two_crows(klines):
@@ -60,7 +61,9 @@ def three_crows(klines):
             continue
         if today['open'] < yesterday['open'] < day_before_yesterday['open'] and today['close'] < yesterday['close'] < day_before_yesterday['close']:
             # 三只乌鸦一旦出现直接清仓
-            results.append(
-                Result(today['code'], 'SELL', today['close'], today['time_key'], 'three_crows',
-                       intension=0))
+            scores = crows_score.three_crows_score(index,klines)
+            if scores > 0:
+                results.append(
+                    Result(today['code'], 'SELL', today['close'], today['time_key'], 'three_crows',
+                           intension=scores))
     return results
