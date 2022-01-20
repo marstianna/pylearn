@@ -3,6 +3,7 @@ import talib as ta
 import constant
 from constant import day_5
 from result import Result
+from strategy.score import belt_hold_line_score
 
 
 def upper_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=0.005):
@@ -40,9 +41,10 @@ def upper_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
                     if not satisfy_low:
                         break
                 if satisfy_low:
+                    scores = belt_hold_line_score.upper_belt_hold_line_score(index, klines)
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'],
-                               'upper_belt_hold_line',intension=constant.default_scores))
+                               'upper_belt_hold_line',intension=scores))
     return results
 
 
@@ -81,6 +83,7 @@ def lower_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
                     if not satisfy_high:
                         break
                 if satisfy_high:
+                    scores = belt_hold_line_score.lower_belt_hold_line_score(index,klines)
                     results.append(Result(today['code'], 'SELL', today['close'], today['time_key'],
-                                          'lower_belt_hold_line',intension=constant.default_scores))
+                                          'lower_belt_hold_line',intension=scores))
     return results

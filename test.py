@@ -99,7 +99,7 @@ def test_group():
     pd.set_option('display.max_colwidth', 1000)
     pd.set_option('display.width', 1000)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, ret_frame = quote_ctx.get_user_security("美股")
+    RET_OK, ret_frame = quote_ctx.get_user_security("港股")
     results = []
     for code in ret_frame['code']:
         print("-----------------start:" + code + "-------------------")
@@ -112,7 +112,7 @@ def test_group():
         tmp.sort(key=lambda res: res.date)
         # compute_profit(tmp)
         compute_profit_score(tmp)
-        today = util.filter_day(tmp,'2022-01-14')
+        today = util.filter_day(tmp,'2022-01-20')
         # today = util.filter_last_day(tmp)
         # for result in tmp:
         #     stop_loss([result], tmp, kline_frame_table)
@@ -134,7 +134,7 @@ def test_single():
     pd.set_option('display.width', 1000)
     pd.set_option('display.float_format', lambda x: ' % .2f' % x)
     quote_ctx = ft.OpenQuoteContext()  # 创建行情对象
-    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='HK.00388',start='2021-01-01',end='2022-01-18')
+    RET_OK, kline_frame_table, next_page_req_key = quote_ctx.request_history_kline(code='SH.601888',start='2021-01-01',end='2022-01-19')
     # days = [5]
     days = [1,2,3,5,7,12,26,50,120]
 
@@ -239,7 +239,7 @@ def compute_profit_score(results):
 
 if __name__ == '__main__':
     start = time.time()
-    # test_group()
-    test_single()
+    test_group()
+    # test_single()
     # print(100000*(1.5**12))
     print(int(time.time() - start))

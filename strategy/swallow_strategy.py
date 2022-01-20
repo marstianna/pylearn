@@ -45,9 +45,10 @@ def upper_swallow_lower(klines):
                         break
                 if satisfy_low:
                     score = swallow_score.swallow_score(index, klines)
-                    results.append(
-                        Result(today['code'], 'BUY', today['close'], today['time_key'], 'swallow',
-                               intension=score))
+                    if score > 0:
+                        results.append(
+                            Result(today['code'], 'BUY', today['close'], today['time_key'], 'swallow',
+                                   intension=score))
     return results
 
 
@@ -89,7 +90,8 @@ def lower_swallow_upper(klines):
                         break
                 if satisfy_high:
                     score = swallow_score.swallow_score(index, klines)
-                    results.append(
-                        Result(today['code'], 'SELL', today['close'], today['time_key'], 'swallow',intension=score))
+                    if score > 0:
+                        results.append(
+                            Result(today['code'], 'SELL', today['close'], today['time_key'], 'swallow',intension=score))
 
     return results
