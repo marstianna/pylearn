@@ -3,9 +3,10 @@ from result import Result
 import talib as ta
 
 from strategy.score import impale_score
+from strategy.stop_loss import break_stop_loss
 
 
-def upper_impale(klines, days=constant.day_5):
+def upper_impale(klines, days=constant.day_mid):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -22,7 +23,7 @@ def upper_impale(klines, days=constant.day_5):
 
         if max(yesterday['open'], yesterday['close']) > today['close'] > (
                 0.5 * (yesterday['open'] + yesterday['close'])) \
-                and today['open'] < yesterday['low']:
+                and today['open'] < yesterday['close']:
 
             satisfy_ma = True
             # 连续days天ma趋势线都是下跌形态
@@ -41,13 +42,16 @@ def upper_impale(klines, days=constant.day_5):
                         break
                 if satisfy_low:
                     score = impale_score.upper_impale_score(index, klines)
+                    success, result = break_stop_loss.break_upper(index, klines, score)
+                    if success:
+                        results.append(result)
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_impale',
                                intension=score))
     return results
 
 
-def lower_impale(klines, days=constant.day_5):
+def lower_impale(klines, days=constant.day_mid):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -62,7 +66,7 @@ def lower_impale(klines, days=constant.day_5):
         if today['open'] < today['close']:
             continue
 
-        if today['open'] > yesterday['high'] \
+        if today['open'] > yesterday['close'] \
                 and (0.5 * (yesterday['open'] + yesterday['close'])) > today['close'] > min(yesterday['open'],
                                                                                             yesterday['close']):
 
@@ -85,6 +89,9 @@ def lower_impale(klines, days=constant.day_5):
                         break
                 if satisfy_high:
                     score = impale_score.lower_impale_score(index, klines)
+                    success, result = break_stop_loss.break_lower(index, klines, score)
+                    if success:
+                        results.append(result)
                     results.append(
                         Result(today['code'], 'SELL', today['close'], today['time_key'], 'lower_impale',
                                intension=score))

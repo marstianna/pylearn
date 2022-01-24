@@ -19,14 +19,15 @@ if __name__ == '__main__':
 
     results = []
     start_time = time.time()
-    stocks = ['600745.XSHG','603236.XSHG','603489.XSHG','002046.XSHE','002810.XSHE','002850.XSHE','002241.XSHE','300014.XSHE','300850.XSHE','300124.XSHE','688050.XSHG','688017.XSHG']
-    # stocks.extend(shanghai_a.stocks)
-    # stocks.extend(shenzhen_a.stocks)
-    # stocks.extend(chuangye.stocks)
-    # stocks.extend(kechuang.stocks)
+    # stocks = ['600745.XSHG','603236.XSHG','603489.XSHG','002046.XSHE','002810.XSHE','002850.XSHE','002241.XSHE','300014.XSHE','300850.XSHE','300124.XSHE','688050.XSHG','688017.XSHG']
+    stocks = []
+    stocks.extend(shanghai_a.stocks)
+    stocks.extend(shenzhen_a.stocks)
+    stocks.extend(chuangye.stocks)
+    stocks.extend(kechuang.stocks)
     for stock_code in stocks:
         print("-----------------start:"+stock_code+"-------------------")
-        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-01-01', end_date='2022-01-14')
+        daily = jq.get_price(security=stock_code, frequency='1d', start_date='2021-12-01', end_date='2022-01-20')
         frame = pd.DataFrame(
             data={'code': stock_code, 'time_key': daily.index.values, 'open': daily['open'], 'close': daily['close'],
                   'high': daily['high'], 'low': daily['low'], 'volume': daily['volume']}).dropna()
@@ -39,10 +40,10 @@ if __name__ == '__main__':
         if len(tmp) <= 0:
             continue
         # today = util.filter_last_day(tmp)
-        # today = util.filter_day(tmp,'2022-01-12')
+        today = util.filter_day(tmp,'2022-01-20')
         # for result in today:
         #     test.stop_loss([result], tmp, frame)
-        results.extend(tmp)
+        results.extend(today)
         # if len(today) > 0:
         #     print(pd.DataFrame(today, columns=Result.columns))
         #     results.extend(today)

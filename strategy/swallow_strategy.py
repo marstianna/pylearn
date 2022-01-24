@@ -6,10 +6,11 @@ from result import Result
 # 吞没形态还需要考虑命中当天的成交量的情况,如果出现对应的放量,那么认为形态有效
 # 吞没形态应该在吞噬的上行或者下行的实体越多,形态效果越强烈,intension的值应该越大
 from strategy.score import swallow_score
+from strategy.stop_loss import break_stop_loss
 
 
 def upper_swallow_lower(klines):
-    days = constant.day_5
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -46,6 +47,9 @@ def upper_swallow_lower(klines):
                 if satisfy_low:
                     score = swallow_score.swallow_score(index, klines)
                     if score > 0:
+                        success,result = break_stop_loss.break_upper(index, klines,score)
+                        if success:
+                            results.append(result)
                         results.append(
                             Result(today['code'], 'BUY', today['close'], today['time_key'], 'swallow',
                                    intension=score))
@@ -53,7 +57,7 @@ def upper_swallow_lower(klines):
 
 
 def lower_swallow_upper(klines):
-    days = constant.day_5
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -91,6 +95,9 @@ def lower_swallow_upper(klines):
                 if satisfy_high:
                     score = swallow_score.swallow_score(index, klines)
                     if score > 0:
+                        success,result = break_stop_loss.break_lower(index, klines,score)
+                        if success:
+                            results.append(result)
                         results.append(
                             Result(today['code'], 'SELL', today['close'], today['time_key'], 'swallow',intension=score))
 

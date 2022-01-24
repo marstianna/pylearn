@@ -3,7 +3,7 @@ def swallow_score(today_kline_idx, klines):
     today = klines.iloc[today_kline_idx]
     today_max = max(today['close'], today['open'])
     today_min = min(today['close'], today['open'])
-    scores = 2
+    scores = 0
     for i in range(1, 6):
         kline = klines.iloc[today_kline_idx - i]
         kline_max = max(kline['close'], kline['open'])

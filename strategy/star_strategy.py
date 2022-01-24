@@ -5,10 +5,11 @@ import talib as ta
 
 # TODO 星型图是由三个蜡烛图组成
 from strategy.score import star_score
+from strategy.stop_loss import break_stop_loss
 
 
 def morning_star(klines):
-    days = constant.day_5
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -54,13 +55,16 @@ def morning_star(klines):
                         break
                 if satisfy_low:
                     score = star_score.morning_star_score(index, klines)
+                    success, result = break_stop_loss.break_upper(index, klines, score)
+                    if success:
+                        results.append(result)
                     results.append(
                         Result(today['code'], 'BUY', today['close'], today['time_key'], 'morning_star',intension=score))
     return results
 
 
 def evening_star(klines):
-    days = constant.day_5
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -110,6 +114,9 @@ def evening_star(klines):
                         break;
                 if satisfy_high:
                     scores = star_score.evening_star_score(index,klines)
+                    success, result = break_stop_loss.break_lower(index, klines, scores)
+                    if success:
+                        results.append(result)
                     results.append(
                         Result(today['code'], 'SELL', today['close'], today['time_key'], 'evening_star',intension=scores))
 

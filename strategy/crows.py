@@ -7,7 +7,7 @@ from strategy.score import crows_score
 
 
 def two_crows(klines):
-    days = day_5
+    days = constant.day_long
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

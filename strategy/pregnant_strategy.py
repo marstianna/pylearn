@@ -3,7 +3,7 @@ from result import Result
 import talib as ta
 
 
-def upper_pregnant(klines,days=5,k=3):
+def upper_pregnant(klines,days=constant.day_mid,k=3):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
     for index in range(len(klines)):
@@ -30,7 +30,7 @@ def upper_pregnant(klines,days=5,k=3):
                     Result(today['code'], 'BUY', today['close'], today['time_key'], 'upper_pregnant',intension=constant.default_scores))
     return results
 
-def lower_pregnant(klines,days=5,k=3):
+def lower_pregnant(klines,days=constant.day_mid,k=3):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

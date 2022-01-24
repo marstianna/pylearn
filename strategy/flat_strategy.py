@@ -7,7 +7,7 @@ from result import Result
 
 
 #平头顶
-def flat_head(klines,days=day_7,k=0.005):
+def flat_head(klines, days=constant.day_12, k=0.005):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -53,7 +53,7 @@ def flat_head(klines,days=day_7,k=0.005):
     return results
 
 
-def flat_bottom(klines,days=day_7,k=0.005):
+def flat_bottom(klines,days=constant.day_12,k=0.005):
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

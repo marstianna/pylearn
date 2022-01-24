@@ -7,7 +7,7 @@ from strategy.score import belt_hold_line_score
 
 
 def upper_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=0.005):
-    days = day_5
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 
@@ -49,7 +49,7 @@ def upper_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=
 
 
 def lower_belt_hold_line(klines, k_upper_shadow_line=0.005, k_lower_shadow_line=0.005):
-    days = day_5
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     results = []
 

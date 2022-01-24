@@ -48,7 +48,7 @@ def define_upper_hammer(klines, k=0.4):
 
 def define_lower_hammer(klines, k=0.3):
     hammers = []
-    days = constant.day_7
+    days = constant.day_mid
     ma = ta.MA(klines['close'], timeperiod=days)
     for index in range(len(klines)):
         if index < days:
